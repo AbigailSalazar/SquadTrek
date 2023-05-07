@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Amigo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/activity_app_bar" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/friends"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/azul_marino"
+                android:textSize="@dimen/title_size"
+                android:fontFamily="@font/montserrat_bold"
+                android:paddingBottom="35dp"
+                />
+
+            <ListView
+                android:id="@+id/amigos_lv"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                />
+
+            <Button
+                android:id="@+id/btnEnviarMensaje"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="@string/agrega_amigos"
+                android:textSize="@dimen/subtitle_size"
+                android:textColor="@color/azul_fuerte"
+                android:textAllCaps="false"
+                android:drawableLeft="@drawable/ic_add"
+                android:drawablePadding="11dp"
+                android:background="@drawable/round_button_icon"
+
+                android:padding="11dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/montserrat_semibold" />
+
+
+
+        </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <include layout="@layout/activity_nav_bar"/>
+    </RelativeLayout>
+</RelativeLayout>

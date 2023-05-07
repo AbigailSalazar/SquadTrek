@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Chat">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/activity_app_bar"/>
+
+            <TextView
+                android:id="@+id/nombreAmigos"
+                android:layout_width="211dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="20dp"
+                android:text="Fátima Macias"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/azul_marino"
+                android:textSize="@dimen/title_size"/>
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Viaje a Guadalajara"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="@dimen/subtitle_size"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/azul_fuerte"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height=".5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="45dp"
+                android:background="@color/azul_marino" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/chat_bubble"
+                    >
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Buenas noticias!!"
+                        android:layout_marginLeft="25dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/azul_marino"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/body_text"
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginLeft="12dp"
+                    android:background="@drawable/chat_bubble">
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Ya encontré un restaurante para ir el cuarto dia :D"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/azul_marino"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/body_text"
+                        />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/round_circle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <EditText
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_weight=".75"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/back_formulario"
+                android:paddingStart="25dp"
+                android:layout_marginRight="25dp"
+                android:hint="Escribe para enviar algo..."
+                />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/round_button_blue"
+                android:drawableTop="@drawable/ic_send"
+                android:paddingTop="12dp"
+                android:drawableTint="@android:color/white"
+                android:elevation="10dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

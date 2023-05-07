@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="7dp"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:id="@+id/notificaciones_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/round_circle" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:id="@+id/tv_nombre_notificaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_notificaciones"
+                android:textColor="@color/azul_marino"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="85dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="@dimen/body_text"
+                />
+
+            <TextView
+                android:id="@+id/tv_mensajes_notificaciones"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/azul_marino"
+                android:layout_marginRight="90dp"
+                android:text="Isaac Perez marcó una actividad realizada en el To-do list de Guadalajara"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="@dimen/body_text"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0.5dp"
+        android:background="@color/azul_marino"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+</LinearLayout>

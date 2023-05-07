@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:id="@+id/select_amigos_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/round_circle" />
+
+        <TextView
+            android:id="@+id/select_amigos_nombre_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/nombre_usuario"
+            android:textColor="@color/azul_marino"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginLeft="20dp"
+            android:textSize="@dimen/body_text"
+            android:layout_marginRight="85dp" />
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

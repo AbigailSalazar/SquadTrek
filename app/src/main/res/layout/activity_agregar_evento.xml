@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".AgregarEvento">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/activity_app_bar"/>
+
+        <TextView
+            android:layout_width="211dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="122dp"
+            android:layout_marginLeft="10dp"
+            android:text="Crea un evento nuevo"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/title_size"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="La organización es clave"
+            android:layout_marginTop="11dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="@dimen/subtitle_size"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/azul_marino"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="29dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iconTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_edit"/>
+                <TextView
+                    android:id="@+id/txtTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:text="Nombra evento"
+                    android:inputType="text|textNoSuggestions"
+                    android:textSize="@dimen/subtitle_size"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/azul_marino"/>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="5dp"
+                android:layout_width="156dp"
+                android:layout_height="0.5dp"
+                android:background="@color/azul_marino"/>
+            <LinearLayout
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/clock"/>
+                <TextView
+                    android:id="@+id/txtHora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agrega hora"
+                    android:textSize="@dimen/body_text"
+                    android:layout_marginLeft="13dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/azul_marino"/>
+            </LinearLayout>
+            <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/location"/>
+            <TextView
+                android:id="@+id/txtUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agrega ubicación"
+                android:textSize="@dimen/body_text"
+                android:autoText="true"
+                android:layout_marginLeft="13dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/azul_marino"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Encargado"
+            android:textSize="@dimen/body_text"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/azul_marino"/>
+        </LinearLayout>
+        <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_button_blue_border"
+                    android:elevation="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="23dp"
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_add"
+                        android:layout_marginRight="10dp"
+                        />
+                    <Button
+                        android:id="@+id/btnSelectAmigo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:textColor="@color/azul_fuerte"
+                        android:textSize="@dimen/subtitle_size"
+                        android:textAllCaps="false"
+                        android:background="@android:color/transparent"
+                        android:paddingLeft="5dp"
+                        android:text="Agregar amigo"/>
+                </LinearLayout>
+        <Button
+            android:id="@+id/btnAceptar"
+            android:layout_width="175dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="@dimen/body_text"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:text="Aceptar" />
+
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <include layout="@layout/activity_nav_bar"/>
+    </RelativeLayout>
+</RelativeLayout>

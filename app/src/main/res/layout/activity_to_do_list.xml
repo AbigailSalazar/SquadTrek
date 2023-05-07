@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ToDoList">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/activity_app_bar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:fillViewport="true"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="33dp"
+                    android:text="@string/todolist"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/azul_marino"
+                    android:textSize="@dimen/title_size"
+                    android:layout_marginBottom="55dp"
+                    />
+
+
+                <ListView
+                    android:id="@+id/to_do_list_lv"
+                    android:layout_height="wrap_content"
+                    android:divider="@null"
+                    android:layout_width="match_parent">
+                </ListView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center"
+                        android:buttonTint="@drawable/radio_button_selector"
+                        android:layout_marginLeft="20dp" >
+                    </RadioButton>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/write_to_add"
+                        android:textColor="@color/azul_marino"
+                        android:textSize="@dimen/text_small"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat_light"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <include layout="@layout/activity_nav_bar"/>
+    </RelativeLayout>
+</RelativeLayout>

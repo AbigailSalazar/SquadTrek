@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_marginTop="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:buttonTint="@drawable/radio_button_selector"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            >
+        </RadioButton>
+
+        <TextView
+            android:id="@+id/to_do_list_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear eventos de los días de viaje"
+            android:textColor="@color/azul_marino"
+            android:layout_marginRight="160dp"
+            android:textSize="@dimen/body_text"
+            android:fontFamily="@font/montserrat_regular"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="28dp"
+        android:layout_width="wrap_content"
+        android:layout_marginRight="55dp"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="7dp"
+        android:background="@color/azul_marino"/>
+
+</LinearLayout>

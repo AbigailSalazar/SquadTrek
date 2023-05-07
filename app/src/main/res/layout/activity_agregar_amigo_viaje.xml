@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".AgregarAmigoViaje">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/activity_app_bar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="160dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/texto_agregar_amigos"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/title_size" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginRight="150dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/texto2_agregar_amigos"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/body_text" />
+
+        <ImageView
+            android:layout_width="310dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/i5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="33dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/envia_codigo"
+            android:textAlignment="center"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/title_size" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="175dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/body_text" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+            <include layout="@layout/activity_nav_bar"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

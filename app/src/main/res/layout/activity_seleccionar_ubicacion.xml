@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".SeleccionarUbicacion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/activity_app_bar"/>
+
+                <TextView
+                    android:layout_width="182dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginLeft="11dp"
+                    android:text="@string/titulo_sel_ubicacion"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/azul_marino"
+                    android:textSize="@dimen/title_size"
+                    />
+
+                <ImageView
+                    android:layout_width="228dp"
+                    android:layout_height="183dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/i2"/>
+        <LinearLayout
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_blue_light_background"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="11dp"
+            android:paddingRight="23dp"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_loop"
+                android:layout_marginRight="10dp"
+                />
+            <EditText
+                android:id="@+id/txtSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/azul_fuerte"
+                android:textSize="@dimen/subtitle_size"
+                android:textAllCaps="false"
+                android:background="@android:color/transparent"
+                android:paddingLeft="5dp" android:text=""/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="11dp"
+            android:text="Los más populares"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/subtitle_size"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="11dp"
+            android:text="En Mexico"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/azul_marino"
+            android:textSize="@dimen/body_text"
+            />
+        <ListView
+            android:id="@+id/listUbicaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:scrollbars="none"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp" />
+        <Button
+            android:id="@+id/btnSiguiente"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/body_text"
+            android:textAllCaps="false"
+            android:background="@drawable/round_button_blue"
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center"
+            android:paddingLeft="27dp"
+            android:paddingRight="27dp"
+            android:text="@string/siguiente_boton"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <include layout="@layout/activity_nav_bar"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917152850",
+    "project_id": "viajesengrupo-23fe9",
+    "storage_bucket": "viajesengrupo-23fe9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917152850:android:22d94149373e8023cc2b8b",
+        "android_client_info": {
+          "package_name": "mx.edu.potros.viajesengrupo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917152850-mj9q30ib9csdqct41u0n2lt5lkir15ul.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXlSIwE7ifEcUufESVtqCIQ05dn5kluK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917152850-mj9q30ib9csdqct41u0n2lt5lkir15ul.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
