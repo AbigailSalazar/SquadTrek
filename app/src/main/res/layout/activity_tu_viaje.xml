@@ -7,8 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".TuViaje">
-
+    <include layout="@layout/activity_app_bar"/>
     <ScrollView
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
@@ -19,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:orientation="vertical">
-    <include layout="@layout/activity_app_bar"/>
+
 
         <TextView
             android:layout_width="211dp"
@@ -32,13 +33,7 @@
             android:textColor="@color/azul_marino"
             android:textSize="@dimen/title_size"/>
 
-        <ListView
-            android:id="@+id/listview_tu_viaje"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:divider="@null"
-            android:layout_width="match_parent"
-            />
+        <include layout="@layout/tu_viaje_view" />
 
         <TextView
             android:id="@+id/tu_viaje_todolist_tv"

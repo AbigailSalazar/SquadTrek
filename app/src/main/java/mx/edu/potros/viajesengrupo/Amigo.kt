@@ -8,12 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Amigo : AppCompatActivity() {
 
-    var amigos: ArrayList<Amigos> = ArrayList<Amigos>()
+    var amigos: ArrayList<AmigoObject> = ArrayList<AmigoObject>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,19 +76,19 @@ class Amigo : AppCompatActivity() {
     }
 
     fun agregarAmigos(){
-        amigos.add(Amigos(R.drawable.round_circle,"Eva Aldrete",""))
-        amigos.add(Amigos(R.drawable.round_circle,"Fátima Macias",""))
-        amigos.add(Amigos(R.drawable.round_circle,"Alejandro Valencia",""))
-        amigos.add(Amigos(R.drawable.round_circle,"Isaac Perez",""))
-        amigos.add(Amigos(R.drawable.round_circle,"Jesús Lares",""))
-        amigos.add(Amigos(R.drawable.round_circle,"Miguel Sanez",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Eva Aldrete",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Fátima Macias",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Alejandro Valencia",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Isaac Perez",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Jesús Lares",""))
+        amigos.add(AmigoObject(R.drawable.round_circle,"Miguel Sanez",""))
     }
 
     private class AdaptadorAmigos: BaseAdapter {
-        var amigos=ArrayList<Amigos>()
+        var amigos=ArrayList<AmigoObject>()
         var contexto: Context?=null
 
-        constructor(contexto: Context, amigos: ArrayList<Amigos>){
+        constructor(contexto: Context, amigos: ArrayList<AmigoObject>){
             this.amigos=amigos
             this.contexto=contexto
         }

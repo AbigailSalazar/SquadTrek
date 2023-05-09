@@ -2,16 +2,18 @@ package mx.edu.potros.viajesengrupo
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class SeleccionarUbicacion : AppCompatActivity() {
     var ubicacionesPopulares = ArrayList<String>()
+    var ubicaciones=ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccionar_ubicacion)
@@ -69,17 +71,54 @@ class SeleccionarUbicacion : AppCompatActivity() {
             }
             // termina :D
 
+        agregarUbicacionesPopulares()
         agregarUbicaciones()
-       var  adaptadorUbicaciones=UbicacionesAdapter(ubicacionesPopulares,this)
+
+        var adaptadorUbicaciones=UbicacionesAdapter(ubicacionesPopulares,this)
         var listUbica:ListView=findViewById(R.id.listUbicaciones)
         listUbica.adapter=adaptadorUbicaciones
 
+        //Seleciionar una ubicación popular
+        listUbica.setOnItemClickListener { adapterView, view, i, l ->
+            SeleccionarFecha.setUbicacion(ubicacionesPopulares.get(i))
+            val intent = Intent(this, SeleccionarFecha::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        //Ubicacion personalizada/Autocomplet text
+        var txtUbicacion:AutoCompleteTextView = findViewById(R.id.txtSearch)
+        val adapterUbicacion: ArrayAdapter<String> = ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_list_item_1, ubicaciones
+        )
+        txtUbicacion.setAdapter(adapterUbicacion)
+
+        //siguiente activity con ubicacion personalizada
+        var btnContinuar:Button=findViewById(R.id.btnSiguiente)
+        btnContinuar.setOnClickListener {
+            SeleccionarFecha.setUbicacion(txtUbicacion.text.toString())
+            val intent = Intent(this, SeleccionarFecha::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
     }
 
-    private fun agregarUbicaciones() {
+    private fun agregarUbicacionesPopulares() {
         ubicacionesPopulares.add("Guadalajara, Jalisco")
         ubicacionesPopulares.add("Monterrey, Nuevo Leon")
         ubicacionesPopulares.add("Cancún, Cancún")
+    }
+
+    private fun agregarUbicaciones(){
+        ubicaciones.add("Cd. Obregón, Son")
+        ubicaciones.add("Hermosillo, Son")
+        ubicaciones.add("Los Angeles, California")
+        ubicaciones.add("Buenos Aires, Buenos Aires")
+        ubicaciones.add("Nuevo leon, Monterrey")
+        ubicaciones.add("New york, New York")
     }
 
     private class UbicacionesAdapter:BaseAdapter{

@@ -27,6 +27,7 @@ class Eventos : AppCompatActivity() {
     //para test
     val viajeId=0;
     val usuarioId="-NUileJDCu_cQMfcael9"
+    var viajeKey=""
     lateinit var list:LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +38,15 @@ class Eventos : AppCompatActivity() {
         //var adapter=EventoAdapter(this,eventos)
         list= findViewById(R.id.listEventos)
         llenarListaEventos(list)
-
+        viajeKey= this.intent.getStringExtra("viajeKey").toString()
         var btnAgregarEvento:Button=findViewById(R.id.btnAgregarEvento)
         var fechaEvento= this.intent.getStringExtra("dia")
         btnAgregarEvento.setOnClickListener {
             var intent= Intent(this,AgregarEvento::class.java)
             intent.putExtra("dia",fechaEvento)
+            if(viajeKey!=null){
+                intent.putExtra("viajeKey",viajeKey)
+            }
             startActivity(intent)
         }
 
@@ -106,12 +110,7 @@ class Eventos : AppCompatActivity() {
     }
 
     fun addEventos(){
-        eventos.add(Evento(R.drawable.airplane,"Vuelo","7:00 am","Aeropuerto de Cd. obregon",0))
-        eventos.add(Evento(R.drawable.house,"Vuelo","10:00 am","Hotel imaginario",0))
-        eventos.add(Evento(R.drawable.house,"Visitar museo","4:00 pm","Museo imaginario",0))
-
-
-        val eventosListener = object : ChildEventListener{
+          val eventosListener = object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {//Actualiza la lista de eventos
                 val evento = snapshot.getValue<Evento>()
                 if (evento != null) {
@@ -140,11 +139,8 @@ class Eventos : AppCompatActivity() {
 
         userRef.child(usuarioId)
             .child("viajesEnProceso")
-            .child(viajeId.toString())
+            .child(viajeKey)
             .child("eventos").addChildEventListener(eventosListener)
-
-
-
     }
 
     fun addEvento(evento:Evento){

@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Inbox : AppCompatActivity() {
 
-    var inbox: ArrayList<Amigos> = ArrayList<Amigos>()
+    var inbox: ArrayList<AmigoObject> = ArrayList<AmigoObject>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,17 +81,17 @@ class Inbox : AppCompatActivity() {
     }
 
     fun agregarInbox(){
-        inbox.add(Amigos(R.drawable.round_circle, "Fátima Macias","Ya encontré un restaurante para ir el..."))
-        inbox.add(Amigos(R.drawable.round_circle, "Isaac Perez","Si, ya agregué un evento nuevo en el..."))
-        inbox.add(Amigos(R.drawable.round_circle, "Jesús Lares","Todaví no encuentro un buen lugar :("))
-        inbox.add(Amigos(R.drawable.round_circle, "Miguel Sanez","Cuídado en la carretera, va a llover"))
+        inbox.add(AmigoObject(R.drawable.round_circle, "Fátima Macias","Ya encontré un restaurante para ir el..."))
+        inbox.add(AmigoObject(R.drawable.round_circle, "Isaac Perez","Si, ya agregué un evento nuevo en el..."))
+        inbox.add(AmigoObject(R.drawable.round_circle, "Jesús Lares","Todaví no encuentro un buen lugar :("))
+        inbox.add(AmigoObject(R.drawable.round_circle, "Miguel Sanez","Cuídado en la carretera, va a llover"))
     }
 
     private class AdaptadorInbox: BaseAdapter {
-        var inbox=ArrayList<Amigos>()
+        var inbox=ArrayList<AmigoObject>()
         var contexto: Context?=null
 
-        constructor(contexto: Context, inbox: ArrayList<Amigos>){
+        constructor(contexto: Context, inbox: ArrayList<AmigoObject>){
             this.inbox=inbox
             this.contexto=contexto
         }

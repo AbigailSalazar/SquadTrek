@@ -1,28 +1,35 @@
 package mx.edu.potros.viajesengrupo
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.database.ktx.snapshots
+import com.google.firebase.database.ktx.values
 
 class TuViaje : AppCompatActivity() {
-    lateinit var viaje:Viaje
 
+    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tu_viaje)
 
-        agregarViajes()
+     /*   agregarViajes()
         var listview: ListView = findViewById(R.id.listview_tu_viaje) as ListView
         var adaptador: TuViaje.AdaptadorViajes = TuViaje.AdaptadorViajes(this, tuViajes)
         listview.adapter = adaptador
-
+*/
 
         // Empieza :D
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
@@ -76,11 +83,17 @@ class TuViaje : AppCompatActivity() {
             val intent = Intent(this, ToDoList::class.java)
             startActivity(intent)
         }
+
+
+
         btnEvento1.setOnClickListener {
             val intent = Intent(this, Eventos::class.java)
-
+            var viajeKey=this.intent.getStringExtra("viajeKey")
             //agregar la fecha, para poderlo buscar los eventos en la bd
             intent.putExtra("dia","11 feb,2023")
+            if(viajeKey!=null){
+                intent.putExtra("viajeKey",viajeKey)
+            }
             startActivity(intent)
         }
         btnEvento2.setOnClickListener {
@@ -88,60 +101,68 @@ class TuViaje : AppCompatActivity() {
             startActivity(intent)
         }
 
+        var btnAmigos:ImageButton= findViewById(R.id.btnAddFriends)
+        btnAmigos.setOnClickListener {
+            val intent = Intent(this, AgregarAmigoViaje::class.java)
+            startActivity(intent)
+        }
+
+        //carga el viaje desde firebase
+        cargarViaje()
+
+        var lugar=findViewById(R.id.tu_viaje_lugar_tv) as TextView
+        var imagen=findViewById(R.id.tu_viaje_imagen_iv) as ImageView
+        var fecha=findViewById(R.id.tu_viaje_rango_fechas_tv) as TextView
+        var amigos=findViewById(R.id.amigo1_tu_viaje) as ImageView
+
+
+
+        if(viajeSel!=null){
+            lugar.setText(viajeSel.ubicacion)
+            imagen.setImageResource(R.drawable.cdmx)
+            fecha.setText(viajeSel.fechaInicio+" a "+ viajeSel.fechaFinal)
+        }
+
+
 
     }
 
-    fun viajeSeleccionado(viajeObject: Viaje){
-        this.viaje=viajeObject
-    }
-    fun agregarViajes(){
-        tuViajes.add(Viajes("Guadalajara, Jalisco",R.drawable.guadalajara,R.drawable.round_circle,"Fechas", "Del 20 a 25 de marzo."))
-        tuViajes.add(Viajes("Monterrey, Nuevo León",R.drawable.monterrey,R.drawable.round_circle,"Fechas", "Del 11 a 15 de junio."))
-        tuViajes.add(Viajes("Cd. Mexico, Mexico",R.drawable.cdmx,R.drawable.round_circle,"Fechas", "Del 11 a 14 de febrero."))
-    }
+    fun cargarViaje(){
+        var viajeId = intent.getStringExtra("viajeKey")
+        if(viajeId!=null){
+            val viajesListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val childData = snapshot.getValue() as Map<String, Any>?
+                    if (childData != null) {
+                        val viaje = Viaje(
+                            (childData["fechaInicio"] as String?)!!,
+                            (childData["fechaFinal"] as String?)!!,
+                            ArrayList(),
+                            (childData["ubicacion"] as String?)!!,
+                            ArrayList()
 
-    private class AdaptadorViajes: BaseAdapter {
-        var viajes=ArrayList<Viajes>()
-        var contexto: Context?=null
+                        )
+                        print(viaje.toString())
+                        viajeSeleccionado(viaje)
+                    }
+                }
 
-        constructor(contexto: Context, viajes: ArrayList<Viajes>){
-            this.viajes=viajes
-            this.contexto=contexto
-        }
-
-        override fun getCount(): Int {
-            return viajes.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return viajes[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var viaj=viajes[position]
-            var inflador= LayoutInflater.from(contexto)
-            var vista=inflador.inflate(R.layout.tu_viaje_view, null)
-            var lugar=vista.findViewById(R.id.tu_viaje_lugar_tv) as TextView
-            var imagen=vista.findViewById(R.id.tu_viaje_imagen_iv) as ImageView
-            var fecha=vista.findViewById(R.id.tu_viaje_rango_fechas_tv) as TextView
-            var amigos=vista.findViewById(R.id.amigo1_tu_viaje) as ImageView
-            var btnAmigos = vista.findViewById(R.id.btnAddFriends) as ImageButton
-
-            lugar.setText(viaj.lugar)
-            imagen.setImageResource(viaj.imagen)
-            amigos.setImageResource(viaj.amigos)
-            fecha.setText(viaj.fechas)
-
-            btnAmigos.setOnClickListener {
-                val intent = Intent(contexto, AgregarAmigoViaje::class.java)
-                contexto!!.startActivity(intent)
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
             }
-            return vista
+            var viajeRef= userRef.child(usuarioId)
+                .child("viajesEnProceso")
+                .child(viajeId)
+                .addValueEventListener(viajesListener)
+        }
+    }
 
+    companion object{
+        private var viajeSel: Viaje =Viaje("","", ArrayList(),"", ArrayList())
+
+        fun viajeSeleccionado(viajeObject: Viaje){
+            this.viajeSel=viajeObject
         }
     }
 

@@ -3,6 +3,7 @@ package mx.edu.potros.viajesengrupo
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -61,6 +62,12 @@ class AgregarAmigoViaje : AppCompatActivity() {
         val btnSiguiente = findViewById<Button>(R.id.btnNext)
         btnSiguiente.setOnClickListener {
             val intent = Intent(this, TuViaje::class.java)
+            var viajeKey=this.intent.getStringExtra("viajeKey")
+            intent.putExtra("viajeKey",viajeKey)
+            if (viajeKey != null) {
+                Log.d("VIAJE_ADDED", viajeKey)
+            }
+
             startActivity(intent)
         }
 

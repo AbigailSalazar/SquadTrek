@@ -104,6 +104,7 @@
                 android:textColor="@color/azul_marino"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/txtEncargado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Encargado"

@@ -3,26 +3,28 @@ package mx.edu.potros.viajesengrupo
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
-import android.util.AttributeSet
-import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import java.lang.ref.WeakReference
+
 
 class AgregarEvento : AppCompatActivity() {
 
-    val viajeId=0;
+
+    val LAUNCH_SEL_AMIGOS= 1
+
     val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     //obtener usuarioId cuando inicie sesion
     private val usuarioTest:Usuario=Usuario("usuarioTest",
         ArrayList(),"viajerR","viajesD", ArrayList())
+    lateinit var txtEncargado:TextView
+    private lateinit var btnAddEncargado:Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_evento)
@@ -32,6 +34,9 @@ class AgregarEvento : AppCompatActivity() {
             ArrayList()
         ))
 
+        txtEncargado=findViewById(R.id.txtEncargado)
+
+        txtWeakReference = WeakReference(txtEncargado)
         var fechaEvento= this.intent.getStringExtra("dia")
         val btnSelectAmigo = findViewById<Button>(R.id.btnSelectAmigo)
         btnSelectAmigo.setOnClickListener {
@@ -152,10 +157,18 @@ class AgregarEvento : AppCompatActivity() {
             builder.show()
         }
 
+        //agregar encargado
+        var amigo=AmigoObject()
+        btnAddEncargado= findViewById(R.id.btnSelectAmigo)
+        btnAddEncargado.setOnClickListener {
+            val i = Intent(this, SeleccionAmigos::class.java)
+            i.putExtra("pagAnterior","AGREGAR_EVENTO")
+            startActivity(i)
+        }
+
+
+
         //guardar evento en la bd
-
-
-
         var btnAceptar:Button= findViewById(R.id.btnAceptar)
         btnAceptar.setOnClickListener {
             val nombre=txtTitulo.text.toString()
@@ -163,20 +176,30 @@ class AgregarEvento : AppCompatActivity() {
             val hora=txtHora.text.toString()
 
 
-            //cambiar dependiendo de cual sea
+        //cambiar dependiendo de cual viaje sea
+        var viajeId=this.intent.getStringExtra("viajeKey")
+        val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
 
-
-            val evento=Evento(R.drawable.house,nombre,hora,ubicacion,0)
-            usuarioTest.viajesEnProceso.get(0).eventos.add(evento)
-
-           //guarda un nuevo evento con el id del usuario
-
+       //guarda un nuevo evento con el id del usuario
+        if(viajeId!=null){
             userRef.child(usuarioId)
                 .child("viajesEnProceso")
-                .child(viajeId.toString())
+                .child(viajeId)
                 .child("eventos")
                 .push().setValue(evento)
             finish()
+        }
+
+        }
+
+    }
+
+    companion object{
+        lateinit var txtWeakReference:WeakReference<TextView>//wraper para el txtview
+        private var amigoSel: AmigoObject = AmigoObject()
+        fun amigoSeleccionado(amigo: AmigoObject){
+            amigoSel=amigo
+            txtWeakReference.get()?.setText("Encargado: "+amigoSel.nombre)
         }
     }
 }

@@ -82,7 +82,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btnSiguiente"
+                android:id="@+id/btnSiguiente2"
                 android:layout_width="wrap_content"
                 android:layout_height="37dp"
                 android:fontFamily="@font/montserrat_semibold"

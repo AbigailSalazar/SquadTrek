@@ -1,26 +1,35 @@
 package mx.edu.potros.viajesengrupo
 
+import android.content.ContentValues
 import android.content.Intent
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.getValue
+import java.lang.ref.WeakReference
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SeleccionarFecha : AppCompatActivity() {
+    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccionar_fecha)
 
-        var calendarView: CalendarView =findViewById(R.id.calendarioInicio)
+        var calendarView: CalendarView = findViewById(R.id.calendarioInicio)
 
-        var btnSiguiente: Button = findViewById(R.id.btnSiguiente)
-        btnSiguiente.setOnClickListener {
-            var intent= Intent(this,AgregarAmigoViaje::class.java)
-            startActivity(intent)
-        }
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
         btnNavAdd.setOnClickListener {
             val intent = Intent(this, SeleccionarUbicacion::class.java)
@@ -66,6 +75,62 @@ class SeleccionarFecha : AppCompatActivity() {
         }
         // termina :D
 
+        //obtener datos de viaje
+        var calendarInicio: CalendarView = findViewById(R.id.calendarioInicio)
+        var calendarFinal: CalendarView = findViewById(R.id.calendarioFinal)
 
+        var fechaInicio=""
+        var fechaFinal=""
+        calendarInicio.setOnDateChangeListener { calendarView, i, i2, i3 ->
+            fechaInicio = "$i3/$i2/$i"
+        }
+        calendarFinal.setOnDateChangeListener { calendarView, i, i2, i3 ->
+            fechaFinal = "$i3/$i2/$i"
+        }
+        //var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyy");
+
+
+
+
+        //pasar id del viaje guardado
+
+        val btnContinuar:Button=findViewById(R.id.btnSiguiente2)
+        btnContinuar.setOnClickListener {
+
+            var viaje = Viaje(
+                fechaInicio,
+                fechaFinal,
+                ArrayList(),
+                ubicacionSel,
+                ArrayList()
+            )
+
+            //obtiene el id del nuevo viaje
+            var viajeRef = userRef.child(usuarioId)
+                .child("viajesEnProceso")
+                .push()
+            var viajeKey = viajeRef.key
+
+            //guardar viaje en bd
+            if (viajeKey != null) {
+                viajeRef.setValue(viaje)
+            }
+            val intent = Intent(this, AgregarAmigoViaje::class.java)
+            intent.putExtra("viajeKey",viajeKey)
+            if (viajeKey != null) {
+                Log.d("VIAJE_ADDED", viajeKey)
+            }
+            startActivity(intent)
+            finish()
+        }
+
+    }
+
+    companion object{
+
+        private var ubicacionSel: String=""
+        fun setUbicacion(ubicacion: String){
+            ubicacionSel=ubicacion
+        }
     }
 }

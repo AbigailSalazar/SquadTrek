@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SeleccionAmigos : AppCompatActivity() {
 
-    var selecAmigos: ArrayList<Amigos> = ArrayList<Amigos>()
+    var selecAmigos: ArrayList<AmigoObject> = ArrayList<AmigoObject>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,28 +76,36 @@ class SeleccionAmigos : AppCompatActivity() {
 
         val selectAmigo = findViewById<ListView>(R.id.select_amigos_lv)
         selectAmigo.setOnItemClickListener { parent, view, position, id ->
-            val intent = Intent(this, PerfilAmigo::class.java)
-            startActivity(intent)
+
+            if(intent.getStringExtra("pagAnterior")=="AGREGAR_EVENTO"){
+                var amigo=selecAmigos[position]
+                AgregarEvento.amigoSeleccionado(amigo)
+                finish()
+            }
+            else{
+                val intent = Intent(this, PerfilAmigo::class.java)
+                startActivity(intent)
+            }
         }
 
 
     }
 
     fun agregarAmigos(){
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Eva Aldrete",""))
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Fátima Macias",""))
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Alejandro Valencia",""))
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Isaac Perez",""))
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Jesús Lares",""))
-        selecAmigos.add(Amigos(R.drawable.round_circle,"Miguel Sanez",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Eva Aldrete",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Fátima Macias",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Alejandro Valencia",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Isaac Perez",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Jesús Lares",""))
+        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Miguel Sanez",""))
 
     }
 
     private class AdaptadorAmigos: BaseAdapter {
-        var amigos=ArrayList<Amigos>()
+        var amigos=ArrayList<AmigoObject>()
         var contexto: Context?=null
 
-        constructor(contexto: Context, amigos: ArrayList<Amigos>){
+        constructor(contexto: Context, amigos: ArrayList<AmigoObject>){
             this.amigos=amigos
             this.contexto=contexto
         }

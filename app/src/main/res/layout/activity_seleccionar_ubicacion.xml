@@ -45,17 +45,19 @@
                 android:src="@drawable/ic_loop"
                 android:layout_marginRight="10dp"
                 />
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/txtSearch"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="31dp"
-
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/azul_fuerte"
-                android:textSize="@dimen/subtitle_size"
+                android:completionThreshold="1"
+                android:textSize="@dimen/body_text"
                 android:textAllCaps="false"
+                android:inputType="text"
                 android:background="@android:color/transparent"
-                android:paddingLeft="5dp" android:text=""/>
+                android:paddingLeft="5dp"
+                />
 
         </LinearLayout>
 
