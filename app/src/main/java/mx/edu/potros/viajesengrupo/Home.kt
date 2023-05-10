@@ -4,13 +4,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class Home : AppCompatActivity() {
+    private val mAuth = FirebaseAuth.getInstance().currentUser
 
 //    var viajes: ArrayList<Viajes> = ArrayList<Viajes>()
 
@@ -75,7 +82,24 @@ class Home : AppCompatActivity() {
             val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
-         // termina :D
+        // termina :D
+
+        var nameTv: TextView = findViewById(R.id.usernameTv)
+        val uid = mAuth?.uid
+
+        val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!)
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.hasChild("username")) {
+                    val username = dataSnapshot.child("username").value.toString()
+                    nameTv.text = username
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("TAG", "Error al leer el nombre de usuario", databaseError.toException())
+            }
+        })
 
 
 

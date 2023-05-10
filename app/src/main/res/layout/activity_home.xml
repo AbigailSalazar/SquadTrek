@@ -14,303 +14,313 @@
         android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include layout="@layout/activity_app_bar"/>
-
-        <TextView
-            android:layout_width="211dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="11dp"
-            android:text="@string/username"
-            android:fontFamily="@font/montserrat_bold"
-            android:textColor="@color/azul_marino"
-            android:textSize="@dimen/title_size"/>
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingTop="5dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="17dp"
-                android:src="@drawable/ic_location_2" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/obregon"
-                android:textSize="@dimen/body_text"
-                android:textColor="@color/azul_marino"
-                android:fontFamily="@font/montserrat_semibold"
-                android:layout_marginRight="150dp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="350dp"
-            android:layout_height="300dp"
-            android:layout_gravity="center"
-            android:src="@drawable/i1"/>
-
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@drawable/wave_home"
-            android:layout_marginBottom="-10dp"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:background="@color/azul_blanco"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/nueva_aventura"
-                android:textSize="@dimen/body_text"
-                android:layout_marginLeft="17dp"
-                android:textColor="@color/azul_marino"
-                android:fontFamily="@font/montserrat_semibold"
-                android:layout_marginRight="150dp" />
+            <include layout="@layout/activity_app_bar"/>
 
             <TextView
                 android:layout_width="211dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="17dp"
-                android:text="@string/mis_viajes"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="11dp"
+                android:text="Hola,"
                 android:fontFamily="@font/montserrat_bold"
                 android:textColor="@color/azul_marino"
-                android:layout_marginBottom="15dp"
+                android:textSize="@dimen/title_size"/>
+            <TextView
+                android:id="@+id/usernameTv"
+                android:layout_width="255dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:text="Username"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/azul_marino"
                 android:textSize="@dimen/title_size"/>
 
-<!--            <ListView-->
-<!--                android:id="@+id/listview_home"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:scrollbars="none"-->
-<!--                android:dividerHeight="-35.0sp"-->
-<!--                android:divider="@null"-->
-<!--                android:layout_width="match_parent"-->
-<!--                />-->
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="17dp"
+                    android:src="@drawable/ic_location_2" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/obregon"
+                    android:textSize="@dimen/body_text"
+                    android:textColor="@color/azul_marino"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:layout_marginRight="150dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="350dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:src="@drawable/i1"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@drawable/wave_home"
+                android:layout_marginBottom="-10dp"
+                android:layout_height="wrap_content">
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:background="@color/azul_blanco">
+                android:background="@color/azul_blanco"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/nueva_aventura"
+                    android:textSize="@dimen/body_text"
+                    android:layout_marginLeft="17dp"
+                    android:textColor="@color/azul_marino"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:layout_marginRight="150dp" />
+
+                <TextView
+                    android:layout_width="211dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="17dp"
+                    android:text="@string/mis_viajes"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/azul_marino"
                     android:layout_marginBottom="15dp"
-                    android:orientation="vertical">
+                    android:textSize="@dimen/title_size"/>
 
-                    <LinearLayout
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="20dp"
-                            android:src="@drawable/ic_location_2" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/guadalajara_jalisco"
-                            android:textSize="@dimen/body_text"
-                            android:layout_gravity="center"
-                            android:textColor="@color/azul_marino"
-                            android:fontFamily="@font/montserrat_semibold"
-                            android:layout_marginRight="150dp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/guadalajara_home_img_iv"
-                        android:layout_width="370dp"
-                        android:layout_height="170dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="20dp"
-                        android:clipToOutline="true"
-                        android:src="@drawable/guadalajara" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="165dp"
-                        android:layout_marginRight="45dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:text="@string/friends"
-                            android:textColor="@color/azul_marino"
-                            android:layout_gravity="center"
-                            android:textSize="@dimen/body_text"
-                            android:layout_marginRight="10dp"
-                            android:fontFamily="@font/montserrat_regular" />
-
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scrollbars="none"
-                            android:fillViewport="true">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
-
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
-
-                            </LinearLayout>
-
-                        </HorizontalScrollView>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:background="@color/azul_blanco">
+                <!--            <ListView-->
+                <!--                android:id="@+id/listview_home"-->
+                <!--                android:layout_height="match_parent"-->
+                <!--                android:scrollbars="none"-->
+                <!--                android:dividerHeight="-35.0sp"-->
+                <!--                android:divider="@null"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                />-->
 
                 <LinearLayout
+                    android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="75dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="20dp"
-                            android:src="@drawable/ic_location_2" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/monterrey_nuevo_leon"
-                            android:textSize="@dimen/body_text"
-                            android:layout_gravity="center"
-                            android:textColor="@color/azul_marino"
-                            android:fontFamily="@font/montserrat_semibold"
-                            android:layout_marginRight="150dp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/monterrey_home_img_iv"
-                        android:layout_width="370dp"
-                        android:layout_height="170dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="20dp"
-                        android:clipToOutline="true"
-                        android:src="@drawable/monterrey" />
+                    android:background="@color/azul_blanco">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="165dp"
-                        android:layout_marginRight="45dp"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="15dp"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:text="@string/friends"
-                            android:textColor="@color/azul_marino"
+                        <LinearLayout
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:src="@drawable/ic_location_2" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/guadalajara_jalisco"
+                                android:textSize="@dimen/body_text"
+                                android:layout_gravity="center"
+                                android:textColor="@color/azul_marino"
+                                android:fontFamily="@font/montserrat_semibold"
+                                android:layout_marginRight="150dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/guadalajara_home_img_iv"
+                            android:layout_width="370dp"
+                            android:layout_height="170dp"
+                            android:scaleType="fitXY"
                             android:layout_gravity="center"
-                            android:textSize="@dimen/body_text"
-                            android:layout_marginRight="10dp"
-                            android:fontFamily="@font/montserrat_regular" />
+                            android:layout_marginTop="20dp"
+                            android:clipToOutline="true"
+                            android:src="@drawable/guadalajara" />
 
-                        <HorizontalScrollView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="165dp"
+                            android:layout_marginRight="45dp"
+                            android:orientation="horizontal">
 
-                            android:scrollbars="none"
-                            android:fillViewport="true">
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="@string/friends"
+                                android:textColor="@color/azul_marino"
+                                android:layout_gravity="center"
+                                android:textSize="@dimen/body_text"
+                                android:layout_marginRight="10dp"
+                                android:fontFamily="@font/montserrat_regular" />
 
-                            <LinearLayout
+                            <HorizontalScrollView
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
+                                android:layout_height="wrap_content"
+                                android:scrollbars="none"
+                                android:fillViewport="true">
 
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
 
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
-                                <ImageView
-                                    android:layout_height="40dp"
-                                    android:layout_width="40dp"
-                                    android:layout_margin="2dp"
-                                    android:src="@drawable/round_circle" />
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
 
-                            </LinearLayout>
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
 
-                        </HorizontalScrollView>
+                                </LinearLayout>
+
+                            </HorizontalScrollView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:background="@color/azul_blanco">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="75dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:src="@drawable/ic_location_2" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/monterrey_nuevo_leon"
+                                android:textSize="@dimen/body_text"
+                                android:layout_gravity="center"
+                                android:textColor="@color/azul_marino"
+                                android:fontFamily="@font/montserrat_semibold"
+                                android:layout_marginRight="150dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/monterrey_home_img_iv"
+                            android:layout_width="370dp"
+                            android:layout_height="170dp"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:clipToOutline="true"
+                            android:src="@drawable/monterrey" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="165dp"
+                            android:layout_marginRight="45dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="@string/friends"
+                                android:textColor="@color/azul_marino"
+                                android:layout_gravity="center"
+                                android:textSize="@dimen/body_text"
+                                android:layout_marginRight="10dp"
+                                android:fontFamily="@font/montserrat_regular" />
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:scrollbars="none"
+                                android:fillViewport="true">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
+
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
+                                    <ImageView
+                                        android:layout_height="40dp"
+                                        android:layout_width="40dp"
+                                        android:layout_margin="2dp"
+                                        android:src="@drawable/round_circle" />
+
+                                </LinearLayout>
+
+                            </HorizontalScrollView>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
+
+
+
+
+
             </LinearLayout>
-
-
-
-
-
 
         </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
 
 
