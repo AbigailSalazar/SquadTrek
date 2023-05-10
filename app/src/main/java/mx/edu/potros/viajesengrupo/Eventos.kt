@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.children
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,7 +27,9 @@ class Eventos : AppCompatActivity() {
     var eventos = ArrayList<Evento>();
     //para test
     val viajeId=0;
-    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val mAuth = FirebaseAuth.getInstance().currentUser
+    val usuarioId = mAuth?.uid
+    //val usuarioId="-NUileJDCu_cQMfcael9"
     var viajeKey=""
     lateinit var list:LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,7 +140,7 @@ class Eventos : AppCompatActivity() {
             }
         }
 
-        userRef.child(usuarioId)
+        userRef.child(usuarioId!!)
             .child("viajesEnProceso")
             .child(viajeKey)
             .child("eventos").addChildEventListener(eventosListener)

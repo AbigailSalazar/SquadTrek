@@ -8,6 +8,7 @@ import android.text.InputType
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.ref.WeakReference
 
@@ -17,7 +18,9 @@ class AgregarEvento : AppCompatActivity() {
 
     val LAUNCH_SEL_AMIGOS= 1
 
-    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val mAuth = FirebaseAuth.getInstance().currentUser
+    val usuarioId = mAuth?.uid
+    //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     //obtener usuarioId cuando inicie sesion
     private val usuarioTest:Usuario=Usuario("usuarioTest",
@@ -182,11 +185,13 @@ class AgregarEvento : AppCompatActivity() {
 
        //guarda un nuevo evento con el id del usuario
         if(viajeId!=null){
-            userRef.child(usuarioId)
-                .child("viajesEnProceso")
-                .child(viajeId)
-                .child("eventos")
-                .push().setValue(evento)
+            if (usuarioId != null) {
+                userRef.child(usuarioId)
+                    .child("viajesEnProceso")
+                    .child(viajeId)
+                    .child("eventos")
+                    .push().setValue(evento)
+            }
             finish()
         }
 

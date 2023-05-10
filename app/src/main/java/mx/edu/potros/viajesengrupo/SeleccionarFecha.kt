@@ -10,6 +10,7 @@ import android.view.DragEvent
 import android.view.View
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,7 +23,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SeleccionarFecha : AppCompatActivity() {
-    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val mAuth = FirebaseAuth.getInstance().currentUser
+    val usuarioId = mAuth?.uid
+    //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +109,7 @@ class SeleccionarFecha : AppCompatActivity() {
             )
 
             //obtiene el id del nuevo viaje
-            var viajeRef = userRef.child(usuarioId)
+            var viajeRef = userRef.child(usuarioId!!)
                 .child("viajesEnProceso")
                 .push()
             var viajeKey = viajeRef.key

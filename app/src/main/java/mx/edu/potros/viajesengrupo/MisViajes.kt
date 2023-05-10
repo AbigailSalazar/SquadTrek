@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -25,7 +26,9 @@ class MisViajes : AppCompatActivity() {
     var viajesids=HashMap<ImageView,String>()
     lateinit var list:LinearLayout
 
-    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val mAuth = FirebaseAuth.getInstance().currentUser
+    val usuarioId = mAuth?.uid
+    //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,9 +154,11 @@ class MisViajes : AppCompatActivity() {
             }
         }
 
-        userRef.child(usuarioId)
-            .child("viajesEnProceso")
-            .addChildEventListener(viajesListener)
+        if (usuarioId != null) {
+            userRef.child(usuarioId)
+                .child("viajesEnProceso")
+                .addChildEventListener(viajesListener)
+        }
     }
 
 //    fun llenarListaViajes(listEventos: LinearLayout){
