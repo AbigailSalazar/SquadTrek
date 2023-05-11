@@ -36,13 +36,18 @@
                     android:layout_marginBottom="55dp"
                     />
 
-
-                <ListView
-                    android:id="@+id/to_do_list_lv"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:id="@+id/toDoListLy"
+                    android:isScrollContainer="false"
+                    android:scrollbars="none"
                     android:divider="@null"
-                    android:layout_width="match_parent">
-                </ListView>
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </LinearLayout>
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -50,6 +55,7 @@
                     android:layout_marginTop="5dp">
 
                     <RadioButton
+                        android:id="@+id/agregarRb"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_marginRight="5dp"
@@ -59,16 +65,17 @@
                     </RadioButton>
 
                     <EditText
+                        android:id="@+id/toDoListEd"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
-                        android:text="@string/write_to_add"
+                        android:hint="@string/write_to_add"
                         android:textColor="@color/azul_marino"
                         android:textSize="@dimen/text_small"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/montserrat_light"
                         />
-                </LinearLayout>
 
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
