@@ -20,6 +20,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.getValue
+import kotlin.collections.emptyList
+import java.util.ArrayList
+
 
 class MisViajes : AppCompatActivity() {
     var misViajes= HashMap<ImageView,Viaje>()
@@ -127,29 +130,34 @@ class MisViajes : AppCompatActivity() {
 
 
     //cargar viajes desde firebase
-    fun cargarViajes(){
+    fun cargarViajes() {
         val viajesListener = object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {//Actualiza la lista de eventos
-                val viaje = snapshot.getValue<Viaje>()
-                if (viaje != null) {
-                    addViaje(viaje)
-                }
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val viajeId = snapshot.key
+                val datosViaje = snapshot.value as HashMap<*, *>
+                val ubicacion = datosViaje["ubicacion"] as String
+                val fechaInicio = datosViaje["fechaInicio"] as String
+                val fechaFinal = datosViaje["fechaFinal"] as String
+
+                val nuevoViaje = Viaje(fechaInicio, fechaFinal, ArrayList<Usuario>(), ubicacion, ArrayList<Evento>())
+
+
+                addViaje(nuevoViaje)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
+                // Handle child changed event if needed
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-
+                // Handle child removed event if needed
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-
+                // Handle child moved event if needed
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
                 Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
             }
         }
@@ -160,6 +168,7 @@ class MisViajes : AppCompatActivity() {
                 .addChildEventListener(viajesListener)
         }
     }
+
 
 //    fun llenarListaViajes(listEventos: LinearLayout){
 //        misViajes.forEach {
