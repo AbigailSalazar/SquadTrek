@@ -23,7 +23,7 @@ import com.google.firebase.database.ktx.getValue
 
 class MisViajes : AppCompatActivity() {
     var misViajes= HashMap<ImageView,Viaje>()
-    var viajesids=HashMap<ImageView,String>()
+    //var viajesids=HashMap<ImageView,String>()
     lateinit var list:LinearLayout
 
     private val mAuth = FirebaseAuth.getInstance().currentUser
@@ -64,9 +64,14 @@ class MisViajes : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener { finish() }
+
         val btnMessages = findViewById<ImageView>(R.id.btnMessages)
         val btnNotifications = findViewById<ImageView>(R.id.btnNotifications)
         btnMessages.setOnClickListener {
@@ -113,7 +118,6 @@ class MisViajes : AppCompatActivity() {
         imagen.setImageResource(R.drawable.cdmx)
         fecha.setText(viaje.fechaInicio+" a "+ viaje.fechaFinal)
         misViajes.set(imagen,viaje)
-
         imagen.setOnClickListener {
             val intent = Intent(this, TuViaje::class.java)
             TuViaje.viajeSeleccionado(misViajes.get(imagen)!!)

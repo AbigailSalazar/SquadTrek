@@ -41,6 +41,9 @@ class Home : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val btnBack:Button = findViewById(R.id.btnBack)
+        btnBack.visibility = View.INVISIBLE
+
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
         btnNavAdd.setOnClickListener {
             val intent = Intent(this, SeleccionarUbicacion::class.java)

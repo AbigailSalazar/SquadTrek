@@ -33,9 +33,7 @@ class AgregarEvento : AppCompatActivity() {
         setContentView(R.layout.activity_agregar_evento)
 
         //viaje de prueba
-        usuarioTest.viajesEnProceso.add(Viaje("11 feb,2023","12 feb,2023", ArrayList(),"Guadalajara",
-            ArrayList()
-        ))
+
 
         txtEncargado=findViewById(R.id.txtEncargado)
 
@@ -79,9 +77,14 @@ class AgregarEvento : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener { finish() }
+
         val btnMessages = findViewById<ImageView>(R.id.btnMessages)
         val btnNotifications = findViewById<ImageView>(R.id.btnNotifications)
         btnMessages.setOnClickListener {

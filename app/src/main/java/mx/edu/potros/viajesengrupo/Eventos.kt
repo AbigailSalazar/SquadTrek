@@ -42,6 +42,9 @@ class Eventos : AppCompatActivity() {
         list= findViewById(R.id.listEventos)
         llenarListaEventos(list)
         viajeKey= this.intent.getStringExtra("viajeKey").toString()
+
+        print("VIAJE_KEY:")
+        print(viajeKey)
         var btnAgregarEvento:Button=findViewById(R.id.btnAgregarEvento)
         var fechaEvento= this.intent.getStringExtra("dia")
         btnAgregarEvento.setOnClickListener {
@@ -85,6 +88,10 @@ class Eventos : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener { finish() }
+
         val btnMessages = findViewById<ImageView>(R.id.btnMessages)
         val btnNotifications = findViewById<ImageView>(R.id.btnNotifications)
         btnMessages.setOnClickListener {

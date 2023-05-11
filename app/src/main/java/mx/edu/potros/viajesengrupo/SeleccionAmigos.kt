@@ -58,9 +58,14 @@ class SeleccionAmigos : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener { finish() }
+
         val btnMessages = findViewById<ImageView>(R.id.btnMessages)
         val btnNotifications = findViewById<ImageView>(R.id.btnNotifications)
         btnMessages.setOnClickListener {

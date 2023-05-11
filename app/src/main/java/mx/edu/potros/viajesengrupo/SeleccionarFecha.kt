@@ -65,6 +65,9 @@ class SeleccionarFecha : AppCompatActivity() {
             }
         }
 
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener { finish() }
+
         // Empieza :D
         val btnMessages = findViewById<ImageView>(R.id.btnMessages)
         val btnNotifications = findViewById<ImageView>(R.id.btnNotifications)
@@ -82,18 +85,16 @@ class SeleccionarFecha : AppCompatActivity() {
         var calendarInicio: CalendarView = findViewById(R.id.calendarioInicio)
         var calendarFinal: CalendarView = findViewById(R.id.calendarioFinal)
 
-        var fechaInicio=""
-        var fechaFinal=""
+        var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyy");
+
+        var fechaInicio=dateFormat.format(calendarInicio.date)
+        var fechaFinal=dateFormat.format(calendarFinal.date)
         calendarInicio.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaInicio = "$i3/$i2/$i"
         }
         calendarFinal.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaFinal = "$i3/$i2/$i"
         }
-        //var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyy");
-
-
-
 
         //pasar id del viaje guardado
 
@@ -112,19 +113,24 @@ class SeleccionarFecha : AppCompatActivity() {
             var viajeRef = userRef.child(usuarioId!!)
                 .child("viajesEnProceso")
                 .push()
+
             var viajeKey = viajeRef.key
 
             //guardar viaje en bd
             if (viajeKey != null) {
-                viajeRef.setValue(viaje)
+                viajeRef.setValue(viaje).addOnSuccessListener {
+                    TuViaje.viajeSeleccionado(viaje)
+                    val intent = Intent(this, AgregarAmigoViaje::class.java)
+                    intent.putExtra("viajeKey",viajeKey)
+                    if (viajeKey != null) {
+                        Log.d("VIAJE_ADDED", viajeKey)
+                    }
+                    startActivity(intent)
+                    finish()
+                }
             }
-            val intent = Intent(this, AgregarAmigoViaje::class.java)
-            intent.putExtra("viajeKey",viajeKey)
-            if (viajeKey != null) {
-                Log.d("VIAJE_ADDED", viajeKey)
-            }
-            startActivity(intent)
-            finish()
+            Toast.makeText(this,"Hubo un error, prueba más tarde",Toast.LENGTH_LONG)
+
         }
 
     }
