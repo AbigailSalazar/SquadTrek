@@ -193,7 +193,8 @@ class AgregarEvento : AppCompatActivity() {
                     .child("viajesEnProceso")
                     .child(viajeId)
                     .child("eventos")
-                    .push().setValue(evento)
+                    .push()
+                    .setValue(evento)
             }
             finish()
         }
