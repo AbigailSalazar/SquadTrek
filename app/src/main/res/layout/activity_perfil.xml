@@ -84,80 +84,18 @@
                         android:textSize="@dimen/body_text" />
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginLeft="16dp"
-                        android:elevation="5dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_location_2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:text="Guadalajara, Jalisco"
-                            android:textColor="@color/azul_marino"
-                            android:fontFamily="@font/montserrat_medium"
-                            android:textSize="@dimen/body_text" />
-
-                    </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/viajesEnProcesoLy"
+                        android:isScrollContainer="false"
+                        android:scrollbars="none"
+                        android:divider="@null"
+                        android:orientation="vertical"
+                        android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginLeft="16dp"
-                        android:elevation="5dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_location_2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:text="Monterrey, Nuevo Leon"
-                            android:textColor="@color/azul_marino"
-                            android:fontFamily="@font/montserrat_medium"
-                            android:textSize="@dimen/body_text" />
-
+                        android:layout_height="wrap_content">
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginLeft="16dp"
-                        android:elevation="5dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_location_2" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:text="Ciudad de Mexico, Mexico"
-                            android:textColor="@color/azul_marino"
-                            android:fontFamily="@font/montserrat_medium"
-                            android:textSize="@dimen/body_text" />
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -189,12 +127,10 @@
                     android:scrollbars="none"
                     android:divider="@null"
                     android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,30 +178,15 @@
                     android:textColor="@color/azul_marino"
                     android:textSize="@dimen/body_text" />
 
-
                 <LinearLayout
+                    android:id="@+id/likePlacesLy"
+                    android:isScrollContainer="false"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="16dp"
-                    android:elevation="5dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_location_2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:text="Ensenada, Baja California"
-                        android:textColor="@color/azul_marino"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:textSize="@dimen/body_text" />
-
+                    android:layout_height="wrap_content">
                 </LinearLayout>
 
                 <LinearLayout
@@ -276,22 +197,19 @@
                     android:layout_marginLeft="16dp"
                     android:elevation="5dp"
                     android:orientation="horizontal">
-
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_location_2" />
-
                     <TextView
+                        android:id="@+id/likePlacesTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
-                        android:text="Acapulco, Guerrero"
+                        android:text="Agregar viaje deseado"
                         android:textColor="@color/azul_marino"
                         android:fontFamily="@font/montserrat_medium"
-                        android:textSize="@dimen/body_text"/>
-
-
+                        android:textSize="@dimen/body_text" />
                 </LinearLayout>
 
 
