@@ -2,6 +2,7 @@ package mx.edu.potros.viajesengrupo
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -15,11 +16,13 @@ import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -36,11 +39,13 @@ class Perfil : AppCompatActivity() {
 
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val uid = mAuth?.uid
+
     val userRef = database.getReference("Usuarios").child(uid!!)
     //   private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
+
         // Empieza :D
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
         btnNavAdd.setOnClickListener {
@@ -170,25 +175,103 @@ class Perfil : AppCompatActivity() {
             builder.create()
             builder.show()
         }
+        // Obtener la referencia de la tabla en Firebase
+       val linearLayout: LinearLayout = findViewById(R.id.viajesRealizadosLy)
+       val userRefViaRe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesRealizados")
+        // Leer los datos de Firebase
+        userRefViaRe.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                linearLayout.removeAllViews()
+                // Iterar a través de los objetos de Firebase
+                for (child in dataSnapshot.children) {
+                    // Obtener los valores de los objetos y agregarlos al LinearLayout
+                    val lugar = child.child("lugar").getValue(String::class.java)
+                    // Inflar la vista personalizada
+                    val itemView = LayoutInflater.from(this@Perfil).inflate(R.layout.viajes_perfil_view, linearLayout, false)
+                    // Configurar los valores de los elementos de la vista personalizada según los datos de Firebase
+                    itemView.findViewById<TextView>(R.id.placeTv).text = lugar
 
-//        val linearLayout: LinearLayout = findViewById(R.id.viajesRealizadosLy)
-//        val userRefViaRe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesRealizados")
-//        userRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                linearLayout.removeAllViews()
-//                for (snapshot in dataSnapshot.children) {
-//                    val viaje = snapshot.getValue(ViajesRealizadosObject::class.java)
-//                    val textView = TextView(this@Perfil)
-//                    textView.text = "${viaje?.lugar}"
-//                    linearLayout.addView(textView)
-//                }
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                Log.d("TAG", "Error", error.toException())
-//            }
-//        })
-        listViajesRealizados= findViewById(R.id.viajesRealizadosLy)
-        llenarViajesRealizados(listViajesRealizados)
+                    linearLayout.addView(itemView)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "Error", error.toException())
+            }
+        })
+
+
+        var likePlacesTv: TextView=findViewById(R.id.likePlacesTv)
+        likePlacesTv.setOnClickListener {
+            var input:EditText=EditText(this)
+            input.inputType=InputType.TYPE_CLASS_TEXT
+            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+
+            builder.setMessage("Viaje Deseado")
+                .setPositiveButton("Aceptar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid)
+                        val place = input.text.toString()
+                        val viajeRef = userRef.child("viajesDeseados").push()
+                        viajeRef.child("lugar").setValue(place)
+                        placeTv.setText("Agregar viaje deseado")
+                        dialog.dismiss()
+                    })
+                .setNegativeButton("Cancelar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        dialog.cancel()
+                    })
+                .setView(input)
+            builder.create()
+            builder.show()
+        }
+        // Obtener la referencia de la tabla en Firebase
+        val likePlacesLy: LinearLayout = findViewById(R.id.likePlacesLy)
+        val userRefViaDe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesDeseados")
+        // Leer los datos de Firebase
+        userRefViaDe.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                likePlacesLy.removeAllViews()
+                // Iterar a través de los objetos de Firebase
+                for (child in dataSnapshot.children) {
+                    // Obtener los valores de los objetos y agregarlos al LinearLayout
+                    val lugar = child.child("lugar").getValue(String::class.java)
+                    // Inflar la vista personalizada
+                    val itemView = LayoutInflater.from(this@Perfil).inflate(R.layout.viajes_perfil_view, likePlacesLy, false)
+                    // Configurar los valores de los elementos de la vista personalizada según los datos de Firebase
+                    itemView.findViewById<TextView>(R.id.placeTv).text = lugar
+
+                    likePlacesLy.addView(itemView)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "Error", error.toException())
+            }
+        })
+
+        val viajesEnProcesoLy: LinearLayout = findViewById(R.id.viajesEnProcesoLy)
+        val userRefViaEnProc = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesEnProceso")
+        userRefViaEnProc.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                viajesEnProcesoLy.removeAllViews()
+                for (child in dataSnapshot.children) {
+                    val lugar = child.child("ubicacion").getValue(String::class.java)
+                    val itemView = LayoutInflater.from(this@Perfil).inflate(R.layout.viajes_proceso_view, viajesEnProcesoLy, false)
+                    itemView.findViewById<TextView>(R.id.placeTv).text = lugar
+
+                    viajesEnProcesoLy.addView(itemView)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "Error", error.toException())
+            }
+        })
+
+
+
+
 
 
 
@@ -216,17 +299,6 @@ class Perfil : AppCompatActivity() {
 
     }
 
-    fun llenarViajesRealizados(ListViajesRealizados: LinearLayout){
-        viajesR.forEach{
-            var inflador= LayoutInflater.from(this);
-            var vista=inflador.inflate(R.layout.viajes_perfil_view,null)
-
-            var lugar=vista.findViewById(R.id.placeTv) as TextView
-            lugar.setText(it.lugar)
-
-            ListViajesRealizados.addView(vista)
-        }
-    }
 
     fun fileUpload() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
