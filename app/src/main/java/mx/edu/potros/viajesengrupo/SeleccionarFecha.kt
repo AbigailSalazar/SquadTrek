@@ -1,26 +1,19 @@
 package mx.edu.potros.viajesengrupo
 
-import android.content.ContentValues
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.DragEvent
-import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.getValue
-import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.time.Duration.Companion.milliseconds
 
 class SeleccionarFecha : AppCompatActivity() {
     private val mAuth = FirebaseAuth.getInstance().currentUser
@@ -85,15 +78,21 @@ class SeleccionarFecha : AppCompatActivity() {
         var calendarInicio: CalendarView = findViewById(R.id.calendarioInicio)
         var calendarFinal: CalendarView = findViewById(R.id.calendarioFinal)
 
-        var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyy");
+        var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyyy");
 
         var fechaInicio=dateFormat.format(calendarInicio.date)
         var fechaFinal=dateFormat.format(calendarFinal.date)
+
+
+        var date1= Calendar.getInstance()
+        var date2= Calendar.getInstance()
         calendarInicio.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaInicio = "$i3/$i2/$i"
+            date1.set(i,i2,i3)
         }
         calendarFinal.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaFinal = "$i3/$i2/$i"
+            date2.set(i,i2,i3)
         }
 
         //pasar id del viaje guardado
@@ -101,35 +100,51 @@ class SeleccionarFecha : AppCompatActivity() {
         val btnContinuar:Button=findViewById(R.id.btnSiguiente2)
         btnContinuar.setOnClickListener {
 
-            var viaje = Viaje(
-                fechaInicio,
-                fechaFinal,
-                ArrayList(),
-                ubicacionSel,
-                ArrayList()
-            )
+            //valida la fecha
+            if((date1.before(date2))){
+                var viaje = Viaje(
+                    fechaInicio,
+                    fechaFinal,
+                    ArrayList(),
+                    ubicacionSel,
+                    ArrayList()
+                )
 
-            //obtiene el id del nuevo viaje
-            var viajeRef = userRef.child(usuarioId!!)
-                .child("viajesEnProceso")
-                .push()
+                //obtiene el id del nuevo viaje
+                var viajeRef = userRef.child(usuarioId!!)
+                    .child("viajesEnProceso")
+                    .push()
 
-            var viajeKey = viajeRef.key
+                var viajeKey = viajeRef.key
 
-            //guardar viaje en bd
-            if (viajeKey != null) {
-                viajeRef.setValue(viaje).addOnSuccessListener {
-                    TuViaje.viajeSeleccionado(viaje)
-                    val intent = Intent(this, AgregarAmigoViaje::class.java)
-                    intent.putExtra("viajeKey",viajeKey)
-                    if (viajeKey != null) {
-                        Log.d("VIAJE_ADDED", viajeKey)
+                //guardar viaje en bd
+                if (viajeKey != null) {
+                    viajeRef.setValue(viaje).addOnSuccessListener {
+                        TuViaje.viajeSeleccionado(viaje)
+                        val intent = Intent(this, AgregarAmigoViaje::class.java)
+                        intent.putExtra("viajeKey",viajeKey)
+                        if (viajeKey != null) {
+                            Log.d("VIAJE_ADDED", viajeKey)
+                        }
+                        startActivity(intent)
+                        finish()
                     }
-                    startActivity(intent)
-                    finish()
+                }
+                else{
+                    Toast.makeText(this,"Hubo un error, prueba más tarde",Toast.LENGTH_LONG)
                 }
             }
-            Toast.makeText(this,"Hubo un error, prueba más tarde",Toast.LENGTH_LONG)
+            else{
+                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+
+                builder.setMessage("Fechas invalidas")
+                    .setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.dismiss()
+                        })
+                builder.create()
+                builder.show()
+            }
 
         }
 

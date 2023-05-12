@@ -100,10 +100,16 @@ class SeleccionarUbicacion : AppCompatActivity() {
         //siguiente activity con ubicacion personalizada
         var btnContinuar:Button=findViewById(R.id.btnSiguiente)
         btnContinuar.setOnClickListener {
-            SeleccionarFecha.setUbicacion(txtUbicacion.text.toString())
-            val intent = Intent(this, SeleccionarFecha::class.java)
-            startActivity(intent)
-            finish()
+            if(txtUbicacion.text.isNotBlank()){
+                SeleccionarFecha.setUbicacion(txtUbicacion.text.toString())
+                val intent = Intent(this, SeleccionarFecha::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else{
+                Toast.makeText(this, "No has elejido la ubicación de tu viaje",Toast.LENGTH_SHORT)
+            }
+
         }
 
 
@@ -121,7 +127,9 @@ class SeleccionarUbicacion : AppCompatActivity() {
         ubicaciones.add("Los Angeles, California")
         ubicaciones.add("Buenos Aires, Buenos Aires")
         ubicaciones.add("Nuevo leon, Monterrey")
-        ubicaciones.add("New york, New York")
+        ubicaciones.add("Tijuana, BC")
+        ubicaciones.add("Encenada, BC")
+        ubicaciones.add("Cd. México, México")
     }
 
     private class UbicacionesAdapter:BaseAdapter{
