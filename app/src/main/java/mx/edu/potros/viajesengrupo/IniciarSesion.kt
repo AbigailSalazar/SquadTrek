@@ -18,6 +18,11 @@ class IniciarSesion : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val mAuth = FirebaseAuth.getInstance().currentUser
+        if(mAuth!=null){
+            val intent= Intent(this, Home::class.java)
+            this.startActivity(intent)
+        }
 
         binding= ActivityIniciarSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
