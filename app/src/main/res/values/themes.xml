@@ -17,6 +17,21 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="buttonEventDay">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">82dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:textSize">@dimen/body_text</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/azul_marino</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:drawablePadding">-20dp</item>
+        <item name="android:drawableLeft">@drawable/ic_calendar</item>
+        <item name="android:padding">22dp</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+
+    </style>
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/azul_fuerte</item>

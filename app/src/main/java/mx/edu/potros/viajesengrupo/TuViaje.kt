@@ -1,25 +1,26 @@
 package mx.edu.potros.viajesengrupo
 
-import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.database.ktx.snapshots
-import com.google.firebase.database.ktx.values
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class TuViaje : AppCompatActivity() {
 
     val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val listDias=ArrayList<Button>()
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,13 +81,58 @@ class TuViaje : AppCompatActivity() {
         // termina :D
 
         val btnTodolist = findViewById<TextView>(R.id.tu_viaje_todolist_tv)
-        val btnEvento1 = findViewById<Button>(R.id.btnEvento1)
-        val btnEvento2 = findViewById<Button>(R.id.btnEvento2)
-
         btnTodolist.setOnClickListener {
             val intent = Intent(this, ToDoList::class.java)
             startActivity(intent)
         }
+        val gridBtnEventos=findViewById<GridLayout>(R.id.gridBtnEventos)
+        //crear botones de eventos para cada dia
+
+        if(viajeSel!=null){
+            var dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy");
+            var fechaInicial:Date= dateFormat.parse(viajeSel.fechaInicio)
+            var fechaFinal:Date= dateFormat.parse(viajeSel.fechaFinal)
+
+            val diff: Long = fechaFinal.time -fechaInicial.time
+            val dias=TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+            Log.i("TU_VIAJE","DIAS: $dias")
+            //crear botones para cada dia
+
+
+            for (i in 0..dias){
+                val dia= i+1
+                var inflador= LayoutInflater.from(this)
+
+                val btnEventos= inflador.inflate(R.layout.button_events_day,null) as Button
+                btnEventos.text = "Dia $dia"
+                gridBtnEventos.addView(btnEventos)
+                btnEventos.setOnClickListener {
+                    //dirijirse a los eventos de este dia
+
+                    //Encontrar dia que indica el boton
+                    val c = Calendar.getInstance()
+                    c.time = fechaInicial
+                    c.add(Calendar.DATE, i.toInt())
+
+
+                    val intent = Intent(this, Eventos::class.java)
+                    intent.putExtra("dia",dateFormat.format(c.time))
+                    intent.putExtra("numDia",btnEventos.text)
+                    /*if(viajeKey!=null){
+                        intent.putExtra("viajeKey",viajeKey)
+                    }*/
+
+                    startActivity(intent)
+                }
+            }
+
+        }
+
+
+       /* val btnEvento1 = findViewById<Button>(R.id.btnEvento1)
+        val btnEvento2 = findViewById<Button>(R.id.btnEvento2)
+
+
 
 
 
@@ -104,7 +150,7 @@ class TuViaje : AppCompatActivity() {
             val intent = Intent(this, Eventos::class.java)
             startActivity(intent)
         }
-
+*/
         var btnAmigos:ImageButton= findViewById(R.id.btnAddFriends)
         btnAmigos.setOnClickListener {
             val intent = Intent(this, AgregarAmigoViaje::class.java)

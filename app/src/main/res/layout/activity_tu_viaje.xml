@@ -73,46 +73,18 @@
                 android:textSize="@dimen/title_size"/>
 
             <GridLayout
-
+                android:id="@+id/gridBtnEventos"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="100dp"
-                android:numColumns="2"
-
-                android:layout_height="90dp">
-
-                <Button
-                    android:id="@+id/btnEvento1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="82dp"
-                    android:layout_columnWeight="1"
-                    android:text="@string/d1"
-                    android:textSize="@dimen/body_text"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/azul_marino"
-                    android:textAllCaps="false"
-                    android:drawablePadding="-20dp"
-                    android:drawableLeft="@drawable/ic_calendar"
-                    android:background="@drawable/round_rectangle_button"
-                    android:padding="22dp"
-                    android:fontFamily="@font/montserrat_bold"/>
-
-                <Button
-                    android:id="@+id/btnEvento2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="82dp"
-                    android:layout_columnWeight="1"
-                    android:text="@string/d2"
-                    android:textSize="@dimen/body_text"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/azul_marino"
-                    android:textAllCaps="false"
-                    android:layout_marginLeft="10dp"
-                    android:drawablePadding="-20dp"
-                    android:drawableLeft="@drawable/ic_calendar"
-                    android:background="@drawable/round_rectangle_button"
-                    android:padding="22dp"
-                    android:fontFamily="@font/montserrat_bold"/>
+                android:columnCount="2"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_gravity="center"
+                android:useDefaultMargins="true"
+                android:layout_marginEnd="10dp"
+                android:layout_height="wrap_content">
 
             </GridLayout>
 

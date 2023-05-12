@@ -19,19 +19,18 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import org.w3c.dom.Text
 
 
 class Eventos : AppCompatActivity() {
 
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     var eventos = ArrayList<Evento>();
-    //para test
-    val viajeId=0;
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
-    //val usuarioId="-NUileJDCu_cQMfcael9"
     var viajeKey=""
     lateinit var list:LinearLayout
+    var fechaEvento= ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eventos)
@@ -46,7 +45,18 @@ class Eventos : AppCompatActivity() {
         print("VIAJE_KEY:")
         print(viajeKey)
         var btnAgregarEvento:Button=findViewById(R.id.btnAgregarEvento)
-        var fechaEvento= this.intent.getStringExtra("dia")
+
+
+        //Editar fecha segun dia
+        var txtDiaTitulo:TextView=findViewById(R.id.txtTituloDia)
+        var txtFecha:TextView=findViewById(R.id.txtFecha)
+        fechaEvento= intent.getStringExtra("dia")!!
+        var dia= intent.getStringExtra("numDia")
+        txtDiaTitulo.text = dia
+        txtFecha.text = fechaEvento
+
+
+        Log.i("EVENTOS", "ENTRASTE AL DIA: $fechaEvento")
         btnAgregarEvento.setOnClickListener {
             var intent= Intent(this,AgregarEvento::class.java)
             intent.putExtra("dia",fechaEvento)
@@ -150,7 +160,8 @@ class Eventos : AppCompatActivity() {
         userRef.child(usuarioId!!)
             .child("viajesEnProceso")
             .child(viajeKey)
-            .child("eventos").addChildEventListener(eventosListener)
+            .child("eventos")
+            .child(fechaEvento!!).addChildEventListener(eventosListener)
     }
 
     fun addEvento(evento:Evento){
