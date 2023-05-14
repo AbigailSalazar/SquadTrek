@@ -1,26 +1,18 @@
 package mx.edu.potros.viajesengrupo
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.getValue
-import kotlin.collections.emptyList
 import java.util.ArrayList
 
 
@@ -63,7 +55,7 @@ class MisViajes : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }
@@ -143,7 +135,7 @@ class MisViajes : AppCompatActivity() {
                 val fechaInicio = datosViaje["fechaInicio"] as String
                 val fechaFinal = datosViaje["fechaFinal"] as String
 
-                val nuevoViaje = Viaje(fechaInicio, fechaFinal, ArrayList<Usuario>(), ubicacion, ArrayList<Evento>())
+                val nuevoViaje = Viaje(fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
 
 
                 addViaje(nuevoViaje)

@@ -1,33 +1,27 @@
 package mx.edu.potros.viajesengrupo
 
 import android.app.AlertDialog
-import android.app.ProgressDialog
-import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
-import java.io.File
 
 class Perfil : AppCompatActivity() {
     private val File = 1
@@ -38,7 +32,7 @@ class Perfil : AppCompatActivity() {
 
 
     private val mAuth = FirebaseAuth.getInstance().currentUser
-    val uid = mAuth?.uid
+    var uid = mAuth?.uid
 
     val userRef = database.getReference("Usuarios").child(uid!!)
     //   private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
@@ -71,13 +65,15 @@ class Perfil : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }
                 else -> false
             }
         }
+
+
 
         val btnBack = findViewById<Button>(R.id.btnBack)
         btnBack.setOnClickListener { finish() }
@@ -95,6 +91,14 @@ class Perfil : AppCompatActivity() {
         // termina :D
 
 
+        var amigoId=intent.getStringExtra("idAmigo")
+        if(amigoId!=null){
+            uid=amigoId
+            var imgEditar:ImageView=findViewById(R.id.imgEditar)
+            imgEditar.visibility= View.INVISIBLE
+
+        }
+
         var nameTv: TextView = findViewById(R.id.usernameTv)
         val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!)
         userRef.addValueEventListener(object : ValueEventListener {
@@ -109,75 +113,87 @@ class Perfil : AppCompatActivity() {
             }
         })
 
-        nameTv.setOnClickListener {
-            val input: EditText = EditText(this)
-            input.inputType = InputType.TYPE_CLASS_TEXT
-            // establece el valor actual del nombre de usuario en el EditText
-            input.setText(nameTv.text.toString())
+        if(amigoId==null){
+            nameTv.setOnClickListener {
+                val input: EditText = EditText(this)
+                input.inputType = InputType.TYPE_CLASS_TEXT
+                // establece el valor actual del nombre de usuario en el EditText
+                input.setText(nameTv.text.toString())
 
-            val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
 
-            builder.setMessage("Nombre de usuario")
-                .setPositiveButton(
-                    "Aceptar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        val newUsername = input.text.toString()
+                builder.setMessage("Nombre de usuario")
+                    .setPositiveButton(
+                        "Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            val newUsername = input.text.toString()
 
-                        if (mAuth != null) {
-                            val userID = mAuth.uid
-                            val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(userID)
+                            if (mAuth != null) {
+                                val userID = mAuth.uid
+                                val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(userID)
 
-                            // actualiza el nombre de usuario en la base de datos
-                            userRef.child("username").setValue(newUsername)
-                                .addOnSuccessListener {
-                                    // actualiza el nombre de usuario en el TextView
-                                    nameTv.text = newUsername
-                                }
-                                .addOnFailureListener { exception ->
-                                    Log.d("TAG", "Error al actualizar el nombre de usuario", exception)
-                                }
-                        }
+                                // actualiza el nombre de usuario en la base de datos
+                                userRef.child("username").setValue(newUsername)
+                                    .addOnSuccessListener {
+                                        // actualiza el nombre de usuario en el TextView
+                                        nameTv.text = newUsername
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.d("TAG", "Error al actualizar el nombre de usuario", exception)
+                                    }
+                            }
 
-                        dialog.dismiss()
-                    })
-                .setNegativeButton(
-                    "Cancelar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.cancel()
-                    })
-                .setView(input)
-            builder.create()
-            builder.show()
+                            dialog.dismiss()
+                        })
+                    .setNegativeButton(
+                        "Cancelar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.cancel()
+                        })
+                    .setView(input)
+                builder.create()
+                builder.show()
+            }
         }
+
 
         var placeTv: TextView=findViewById(R.id.placeTv)
-        placeTv.setOnClickListener {
-            var input:EditText=EditText(this)
-            input.inputType=InputType.TYPE_CLASS_TEXT
-            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
 
-            builder.setMessage("Viaje realizado")
-                .setPositiveButton("Aceptar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid)
-                        val place = input.text.toString()
-                        val viajeRef = userRef.child("viajesRealizados").push()
-                        viajeRef.child("lugar").setValue(place)
-                       // viajeRef.setValue(place)
-                        placeTv.setText("Agregar viaje realizado")
-                        dialog.dismiss()
-                    })
-                .setNegativeButton("Cancelar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.cancel()
-                    })
-                .setView(input)
-            builder.create()
-            builder.show()
+        if(amigoId==null){
+            placeTv.setOnClickListener {
+                var input:EditText=EditText(this)
+                input.inputType=InputType.TYPE_CLASS_TEXT
+                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+
+                builder.setMessage("Viaje realizado")
+                    .setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(
+                                uid!!
+                            )
+                            val place = input.text.toString()
+                            val viajeRef = userRef.child("viajesRealizados").push()
+                            viajeRef.child("lugar").setValue(place)
+                            // viajeRef.setValue(place)
+                            placeTv.setText("Agregar viaje realizado")
+                            dialog.dismiss()
+                        })
+                    .setNegativeButton("Cancelar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.cancel()
+                        })
+                    .setView(input)
+                builder.create()
+                builder.show()
+            }
         }
+        else{
+            placeTv.setText("")
+        }
+
         // Obtener la referencia de la tabla en Firebase
        val linearLayout: LinearLayout = findViewById(R.id.viajesRealizadosLy)
-       val userRefViaRe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesRealizados")
+       val userRefViaRe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!).child("viajesRealizados")
         // Leer los datos de Firebase
         userRefViaRe.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -202,32 +218,40 @@ class Perfil : AppCompatActivity() {
 
 
         var likePlacesTv: TextView=findViewById(R.id.likePlacesTv)
-        likePlacesTv.setOnClickListener {
-            var input:EditText=EditText(this)
-            input.inputType=InputType.TYPE_CLASS_TEXT
-            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+        if(amigoId==null){
+            likePlacesTv.setOnClickListener {
+                var input:EditText=EditText(this)
+                input.inputType=InputType.TYPE_CLASS_TEXT
+                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
 
-            builder.setMessage("Viaje Deseado")
-                .setPositiveButton("Aceptar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid)
-                        val place = input.text.toString()
-                        val viajeRef = userRef.child("viajesDeseados").push()
-                        viajeRef.child("lugar").setValue(place)
-                        placeTv.setText("Agregar viaje deseado")
-                        dialog.dismiss()
-                    })
-                .setNegativeButton("Cancelar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.cancel()
-                    })
-                .setView(input)
-            builder.create()
-            builder.show()
+                builder.setMessage("Viaje Deseado")
+                    .setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(
+                                uid!!
+                            )
+                            val place = input.text.toString()
+                            val viajeRef = userRef.child("viajesDeseados").push()
+                            viajeRef.child("lugar").setValue(place)
+                            placeTv.setText("Agregar viaje deseado")
+                            dialog.dismiss()
+                        })
+                    .setNegativeButton("Cancelar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.cancel()
+                        })
+                    .setView(input)
+                builder.create()
+                builder.show()
+            }
         }
+        else{
+            likePlacesTv.setText("")
+        }
+
         // Obtener la referencia de la tabla en Firebase
         val likePlacesLy: LinearLayout = findViewById(R.id.likePlacesLy)
-        val userRefViaDe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesDeseados")
+        val userRefViaDe = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!).child("viajesDeseados")
         // Leer los datos de Firebase
         userRefViaDe.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -251,7 +275,7 @@ class Perfil : AppCompatActivity() {
         })
 
         val viajesEnProcesoLy: LinearLayout = findViewById(R.id.viajesEnProcesoLy)
-        val userRefViaEnProc = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("viajesEnProceso")
+        val userRefViaEnProc = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!).child("viajesEnProceso")
         userRefViaEnProc.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 viajesEnProcesoLy.removeAllViews()
@@ -270,16 +294,12 @@ class Perfil : AppCompatActivity() {
         })
 
 
-
-
-
-
-
         val uploadImageView: ImageView=findViewById(R.id.photoIv)
-        uploadImageView.setOnClickListener {
-            fileUpload()
+        if(amigoId==null){
+            uploadImageView.setOnClickListener {
+                fileUpload()
+            }
         }
-
 
         val fotoRef = FirebaseDatabase.getInstance().getReference("Fotos").child(uid!!)
         fotoRef.addValueEventListener(object : ValueEventListener {
@@ -299,6 +319,7 @@ class Perfil : AppCompatActivity() {
 
     }
 
+    fun setEditable(){}
 
     fun fileUpload() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)

@@ -1,13 +1,10 @@
 package mx.edu.potros.viajesengrupo
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -68,7 +65,7 @@ class Home : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }

@@ -51,7 +51,7 @@ class Notificaciones : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }

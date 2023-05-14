@@ -1,25 +1,20 @@
 package mx.edu.potros.viajesengrupo
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.children
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import org.w3c.dom.Text
 
 
 class Eventos : AppCompatActivity() {
@@ -91,7 +86,7 @@ class Eventos : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }

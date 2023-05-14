@@ -23,8 +23,6 @@ class AgregarEvento : AppCompatActivity() {
     //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     //obtener usuarioId cuando inicie sesion
-    private val usuarioTest:Usuario=Usuario("usuarioTest",
-        ArrayList(),"viajerR","viajesD", ArrayList())
     lateinit var txtEncargado:TextView
     private lateinit var btnAddEncargado:Button
 
@@ -73,7 +71,7 @@ class AgregarEvento : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }

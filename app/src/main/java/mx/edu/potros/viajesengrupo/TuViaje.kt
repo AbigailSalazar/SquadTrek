@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,7 +19,8 @@ import java.util.concurrent.TimeUnit
 
 class TuViaje : AppCompatActivity() {
 
-    val usuarioId="-NUileJDCu_cQMfcael9"
+    private val mAuth = FirebaseAuth.getInstance().currentUser
+    val usuarioId = mAuth?.uid
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     private val listDias=ArrayList<Button>()
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
@@ -57,7 +59,7 @@ class TuViaje : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }
@@ -201,7 +203,7 @@ class TuViaje : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             }
-            var viajeRef= userRef.child(usuarioId)
+            var viajeRef= userRef.child(usuarioId!!)
                 .child("viajesEnProceso")
                 .child(viajeId)
                 .addValueEventListener(viajesListener)

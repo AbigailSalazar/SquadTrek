@@ -15,7 +15,7 @@
             android:name=".Chat"
             android:exported="false" />
         <activity
-            android:name=".Amigo"
+            android:name=".Amigos"
             android:exported="false" />
         <activity
             android:name=".TuViaje"

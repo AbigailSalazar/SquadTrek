@@ -13,7 +13,6 @@ import com.google.firebase.database.FirebaseDatabase
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration.Companion.milliseconds
 
 class SeleccionarFecha : AppCompatActivity() {
     private val mAuth = FirebaseAuth.getInstance().currentUser
@@ -50,7 +49,7 @@ class SeleccionarFecha : AppCompatActivity() {
                     true
                 }
                 R.id.btnAmigos -> {
-                    val intent = Intent(this, Amigo::class.java)
+                    val intent = Intent(this, Amigos::class.java)
                     startActivity(intent)
                     true
                 }
