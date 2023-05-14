@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -30,12 +31,14 @@ class Eventos : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eventos)
 
-        addEventos()
+        viajeKey= this.intent.getStringExtra("viajeKey").toString()
+        fechaEvento= intent.getStringExtra("dia")!!
 
+        addEventos()
         //var adapter=EventoAdapter(this,eventos)
         list= findViewById(R.id.listEventos)
         llenarListaEventos(list)
-        viajeKey= this.intent.getStringExtra("viajeKey").toString()
+
 
         print("VIAJE_KEY:")
         print(viajeKey)
@@ -45,7 +48,7 @@ class Eventos : AppCompatActivity() {
         //Editar fecha segun dia
         var txtDiaTitulo:TextView=findViewById(R.id.txtTituloDia)
         var txtFecha:TextView=findViewById(R.id.txtFecha)
-        fechaEvento= intent.getStringExtra("dia")!!
+
         var dia= intent.getStringExtra("numDia")
         txtDiaTitulo.text = dia
         txtFecha.text = fechaEvento
@@ -112,18 +115,6 @@ class Eventos : AppCompatActivity() {
 
     }
 
-    private fun ocultarNavBar() {
-        var navBar:LinearLayout=findViewById(R.id.nav_bar)
-
-        var scrollView:ScrollView=findViewById(R.id.scrollViewEventos)
-        if(scrollView.canScrollVertically(1)||scrollView.canScrollVertically(-1)){
-            navBar.visibility= View.GONE
-        }
-        scrollView.setOnScrollChangeListener { view, i, i2, i3, i4 ->
-            navBar.visibility= View.VISIBLE
-        }
-    }
-
     fun addEventos(){
           val eventosListener = object : ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {//Actualiza la lista de eventos
@@ -135,15 +126,15 @@ class Eventos : AppCompatActivity() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -156,7 +147,7 @@ class Eventos : AppCompatActivity() {
             .child("viajesEnProceso")
             .child(viajeKey)
             .child("eventos")
-            .child(fechaEvento!!).addChildEventListener(eventosListener)
+            .child(fechaEvento!!.replace("/","-")).addChildEventListener(eventosListener)
     }
 
     fun addEvento(evento:Evento){
@@ -173,6 +164,16 @@ class Eventos : AppCompatActivity() {
         titulo.setText(evento.titulo)
         hora.setText((evento.hora))
         ubicacion.setText(evento.ubicacion)
+
+        imgEncargado.setOnClickListener {
+            val intent = Intent(this, Perfil::class.java)
+            intent.putExtra("idAmigo", evento.encargado.id)
+            startActivity(intent)
+        }
+
+        Glide.with(this@Eventos)
+            .load(evento.encargado.foto)
+            .into(imgEncargado)
 
         list.addView(vista)
     }
@@ -192,6 +193,17 @@ class Eventos : AppCompatActivity() {
             titulo.setText(it.titulo)
             hora.setText((it.hora))
             ubicacion.setText(it.ubicacion)
+
+            var encargadoId= it.encargado.id
+            imgEncargado.setOnClickListener {
+                val intent = Intent(this, Perfil::class.java)
+                intent.putExtra("idAmigo", encargadoId)
+                startActivity(intent)
+            }
+
+            Glide.with(this@Eventos)
+                .load(it.encargado.foto)
+                .into(imgEncargado)
 
             listEventos.addView(vista)
         }

@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
+        android:paddingBottom="60dp"
         android:orientation="vertical">
         <ScrollView
             android:layout_width="match_parent"
@@ -256,6 +256,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/amigos_ly"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -265,30 +266,8 @@
                         android:elevation="5dp"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@drawable/round_circle" />
-
-                        <ImageView
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@drawable/round_circle" />
-
-
-                        <ImageView
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@drawable/round_circle" />
-
                         <ImageButton
-                            android:id="@+id/btnNavAdd"
+                            android:id="@+id/btnAddAmigos"
                             android:layout_width="52dp"
                             android:layout_height="52dp"
                             android:elevation="12dp"

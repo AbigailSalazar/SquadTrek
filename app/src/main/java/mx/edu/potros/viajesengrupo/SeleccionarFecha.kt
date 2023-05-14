@@ -101,7 +101,7 @@ class SeleccionarFecha : AppCompatActivity() {
 
             //valida la fecha
             if((date1.before(date2))){
-                var viaje = Viaje(
+                var viaje = Viaje("",
                     fechaInicio,
                     fechaFinal,
                     ArrayList(),

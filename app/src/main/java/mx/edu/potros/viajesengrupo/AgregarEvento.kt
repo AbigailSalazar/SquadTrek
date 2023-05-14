@@ -20,9 +20,7 @@ class AgregarEvento : AppCompatActivity() {
 
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
-    //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
-    //obtener usuarioId cuando inicie sesion
     lateinit var txtEncargado:TextView
     private lateinit var btnAddEncargado:Button
 
@@ -165,7 +163,7 @@ class AgregarEvento : AppCompatActivity() {
         var amigo=AmigoObject()
         btnAddEncargado= findViewById(R.id.btnSelectAmigo)
         btnAddEncargado.setOnClickListener {
-            val i = Intent(this, SeleccionAmigos::class.java)
+            val i = Intent(this, Amigos::class.java)
             i.putExtra("pagAnterior","AGREGAR_EVENTO")
             startActivity(i)
         }
@@ -179,34 +177,47 @@ class AgregarEvento : AppCompatActivity() {
             val ubicacion=txtUbicacion.text.toString()
             val hora=txtHora.text.toString()
 
+            if(amigoSel.id!=""&&nombre.isNotBlank()&&ubicacion.isNotBlank()&&hora.isNotBlank()){
+                //cambiar dependiendo de cual viaje sea y dia
+                var viajeId=this.intent.getStringExtra("viajeKey")
+                var dia=this.intent.getStringExtra("dia")
+                val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
 
-        //cambiar dependiendo de cual viaje sea
-        var viajeId=this.intent.getStringExtra("viajeKey")
-        val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
-
-       //guarda un nuevo evento con el id del usuario
-        if(viajeId!=null){
-            if (usuarioId != null) {
-                userRef.child(usuarioId)
-                    .child("viajesEnProceso")
-                    .child(viajeId)
-                    .child("eventos")
-                    .push()
-                    .setValue(evento)
+                //guarda un nuevo evento con el id del usuario
+                if(viajeId!=null){
+                    if (usuarioId != null) {
+                        userRef.child(usuarioId)
+                            .child("viajesEnProceso")
+                            .child(viajeId)
+                            .child("eventos")
+                            .child(dia!!.replace("/","-"))
+                            .push()
+                            .setValue(evento)
+                    }
+                    finish()
+                }
             }
-            finish()
-        }
+            else{
+                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+                builder.setMessage("Informacion incompleta")
+                    .setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.dismiss()
+                        })
+                builder.create()
+                builder.show()
+            }
 
         }
 
     }
 
     companion object{
-        lateinit var txtWeakReference:WeakReference<TextView>//wraper para el txtview
-        private var amigoSel: AmigoObject = AmigoObject()
-        fun amigoSeleccionado(amigo: AmigoObject){
+        lateinit var txtWeakReference:WeakReference<TextView>//wrapper para el txtview
+        private var amigoSel: Usuario = Usuario()
+        fun amigoSeleccionado(amigo: Usuario){
             amigoSel=amigo
-            txtWeakReference.get()?.setText("Encargado: "+amigoSel.nombre)
+            txtWeakReference.get()?.setText("Encargado: "+amigoSel.username)
         }
     }
 }

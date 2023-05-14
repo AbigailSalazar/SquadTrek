@@ -12,14 +12,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SeleccionAmigos : AppCompatActivity() {
 
-    var selecAmigos: ArrayList<AmigoObject> = ArrayList<AmigoObject>()
+    var selecAmigos: ArrayList<Usuario> = ArrayList<Usuario>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccion_amigos)
 
 
-        agregarAmigos()
+        //agregarAmigos()
 
 
         var listview: ListView = findViewById(R.id.select_amigos_lv)
@@ -97,21 +97,21 @@ class SeleccionAmigos : AppCompatActivity() {
 
     }
 
-    fun agregarAmigos(){
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Eva Aldrete",""))
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Fátima Macias",""))
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Alejandro Valencia",""))
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Isaac Perez",""))
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Jesús Lares",""))
-        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Miguel Sanez",""))
-
-    }
+//    fun agregarAmigos(){
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Eva Aldrete",""))
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Fátima Macias",""))
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Alejandro Valencia",""))
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Isaac Perez",""))
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Jesús Lares",""))
+//        selecAmigos.add(AmigoObject(R.drawable.round_circle,"Miguel Sanez",""))
+//
+//    }
 
     private class AdaptadorAmigos: BaseAdapter {
-        var amigos=ArrayList<AmigoObject>()
+        var amigos=ArrayList<Usuario>()
         var contexto: Context?=null
 
-        constructor(contexto: Context, amigos: ArrayList<AmigoObject>){
+        constructor(contexto: Context, amigos: ArrayList<Usuario>){
             this.amigos=amigos
             this.contexto=contexto
         }
@@ -136,8 +136,8 @@ class SeleccionAmigos : AppCompatActivity() {
             var imagen=vista.findViewById(R.id.select_amigos_img) as ImageView
             var nombre=vista.findViewById(R.id.select_amigos_nombre_tv) as TextView
 
-            imagen.setImageResource(amig.imagen)
-            nombre.setText(amig.nombre)
+            //imagen.setImageResource(amig.foto)
+            nombre.setText(amig.username)
 
             return vista
 

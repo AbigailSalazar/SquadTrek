@@ -135,8 +135,7 @@ class MisViajes : AppCompatActivity() {
                 val fechaInicio = datosViaje["fechaInicio"] as String
                 val fechaFinal = datosViaje["fechaFinal"] as String
 
-                val nuevoViaje = Viaje(fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
-
+                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
 
                 addViaje(nuevoViaje)
             }

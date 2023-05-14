@@ -116,14 +116,11 @@ class TuViaje : AppCompatActivity() {
                     c.time = fechaInicial
                     c.add(Calendar.DATE, i.toInt())
 
-
+                    //Se dirije a eventos del dia
                     val intent = Intent(this, Eventos::class.java)
                     intent.putExtra("dia",dateFormat.format(c.time))
                     intent.putExtra("numDia",btnEventos.text)
-                    /*if(viajeKey!=null){
-                        intent.putExtra("viajeKey",viajeKey)
-                    }*/
-
+                    intent.putExtra("viajeKey", viajeSel.id)
                     startActivity(intent)
                 }
             }
@@ -187,6 +184,7 @@ class TuViaje : AppCompatActivity() {
                     val childData = snapshot.getValue() as Map<String, Any>?
                     if (childData != null) {
                         val viaje = Viaje(
+                            snapshot.key!!,
                             (childData["fechaInicio"] as String?)!!,
                             (childData["fechaFinal"] as String?)!!,
                             ArrayList(),
@@ -211,7 +209,7 @@ class TuViaje : AppCompatActivity() {
     }
 
     companion object{
-        private var viajeSel: Viaje =Viaje("","", ArrayList(),"", ArrayList())
+        private var viajeSel: Viaje =Viaje("","","", ArrayList(),"", ArrayList())
 
         fun viajeSeleccionado(viajeObject: Viaje){
             this.viajeSel=viajeObject

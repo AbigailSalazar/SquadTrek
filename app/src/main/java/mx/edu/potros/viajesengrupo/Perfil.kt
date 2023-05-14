@@ -3,7 +3,7 @@ package mx.edu.potros.viajesengrupo
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.opengl.Visibility
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
@@ -14,14 +14,12 @@ import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.util.zip.Inflater
 
 class Perfil : AppCompatActivity() {
     private val File = 1
@@ -29,11 +27,10 @@ class Perfil : AppCompatActivity() {
 //    val myRef = database.getReference("Usuarios")
     lateinit var listViajesRealizados:LinearLayout
     var viajesR = ArrayList<ViajesRealizadosObject>()
-
-
+    var amigosId=ArrayList<String>()
     private val mAuth = FirebaseAuth.getInstance().currentUser
     var uid = mAuth?.uid
-
+    lateinit var amigosly:LinearLayout
     val userRef = database.getReference("Usuarios").child(uid!!)
     //   private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,8 +70,6 @@ class Perfil : AppCompatActivity() {
             }
         }
 
-
-
         val btnBack = findViewById<Button>(R.id.btnBack)
         btnBack.setOnClickListener { finish() }
 
@@ -90,15 +85,20 @@ class Perfil : AppCompatActivity() {
         }
         // termina :D
 
+        var amigosly=findViewById<LinearLayout>(R.id.amigos_ly)
 
+
+        //configura el perfil para que no sea editable si es de un amigo
         var amigoId=intent.getStringExtra("idAmigo")
         if(amigoId!=null){
             uid=amigoId
             var imgEditar:ImageView=findViewById(R.id.imgEditar)
             imgEditar.visibility= View.INVISIBLE
-
+            val btnAddAmigos = findViewById<ImageButton>(R.id.btnAddAmigos)
+            btnAddAmigos.visibility=View.INVISIBLE
         }
 
+        cargarAmigos()
         var nameTv: TextView = findViewById(R.id.usernameTv)
         val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!)
         userRef.addValueEventListener(object : ValueEventListener {
@@ -155,7 +155,6 @@ class Perfil : AppCompatActivity() {
                 builder.show()
             }
         }
-
 
         var placeTv: TextView=findViewById(R.id.placeTv)
 
@@ -218,7 +217,7 @@ class Perfil : AppCompatActivity() {
 
 
         var likePlacesTv: TextView=findViewById(R.id.likePlacesTv)
-        if(amigoId==null){
+        if(amigoId==null){//para saber si es el perfil propio o de un amigo
             likePlacesTv.setOnClickListener {
                 var input:EditText=EditText(this)
                 input.inputType=InputType.TYPE_CLASS_TEXT
@@ -317,9 +316,90 @@ class Perfil : AppCompatActivity() {
             }
         })
 
+
+
     }
 
-    fun setEditable(){}
+    fun cargarAmigos(){
+        val amigosListener = object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val datosAmigos = snapshot.getValue()
+                amigosId.add(datosAmigos.toString())
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        }
+
+        val usuariosListener = object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                if(amigosId.contains(snapshot.key)){
+                    val fotoRef = FirebaseDatabase.getInstance().getReference("Fotos").child(snapshot.key!!)
+
+                    fotoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()&& dataSnapshot.hasChild("foto")) {
+                                val fotoUrl = dataSnapshot.child("foto").value.toString()
+                                cargarFoto(fotoUrl)
+                            }
+                            else{
+                                cargarFoto("")
+                            }
+                        }
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.d("TAG", "Error al leer la URL de la foto del usuario", databaseError.toException())
+                        }
+                    })
+
+                }
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        }
+        userRef.child(uid!!)
+            .child("amigos").addChildEventListener(amigosListener)
+
+        userRef.addChildEventListener(usuariosListener)
+    }
+    fun cargarFoto(fotoUrl: String) {
+        var inflater=LayoutInflater.from(this)
+        var view=inflater.inflate(R.layout.amigo_view,null)
+        var imageView:ImageView=view.findViewById(R.id.amigoImg)
+        if(fotoUrl!=""){
+            Log.i("PERFIL","CARGANDO_FOTO")
+            Glide.with(this@Perfil)
+                .load(fotoUrl)
+                .error(R.drawable.round_circle)
+                .into(imageView)
+
+        }
+        amigosly.addView(view)
+    }
 
     fun fileUpload() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)

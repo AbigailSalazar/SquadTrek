@@ -93,9 +93,17 @@ class Amigos : AppCompatActivity() {
         }
 
         listview.setOnItemClickListener { adapterView, view, i, l ->
-            val intent = Intent(this, Perfil::class.java)
-            intent.putExtra("idAmigo", amigos[i].id)
-            startActivity(intent)
+            if(intent.getStringExtra("pagAnterior")=="AGREGAR_EVENTO"){
+                var amigo=amigos[i]
+                AgregarEvento.amigoSeleccionado(amigo)
+                finish()
+            }
+            else
+            {
+                val intent = Intent(this, Perfil::class.java)
+                intent.putExtra("idAmigo", amigos[i].id)
+                startActivity(intent)
+            }
         }
 
 
