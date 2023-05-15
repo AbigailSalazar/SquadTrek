@@ -24,6 +24,7 @@ class TuViaje : AppCompatActivity() {
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     private val listDias=ArrayList<Button>()
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     var viajeKey=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,9 +206,7 @@ class TuViaje : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             }
-            var viajeRef= userRef.child(usuarioId!!)
-                .child("viajesEnProceso")
-                .child(viajeId)
+            viajesRef.child(viajeKey!!)
                 .addValueEventListener(viajesListener)
         }
     }

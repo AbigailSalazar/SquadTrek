@@ -39,6 +39,8 @@ class Perfil : AppCompatActivity() {
         auth = Firebase.auth
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
+        //configura el perfil para que no sea editable si es de un amigo
+        var amigoId=intent.getStringExtra("idAmigo")
 
         val btnCerrarSesion = findViewById<Button>(R.id.logoutButton)
         btnCerrarSesion.setOnClickListener {
@@ -104,14 +106,14 @@ class Perfil : AppCompatActivity() {
         var amigosly=findViewById<LinearLayout>(R.id.amigos_ly)
 
 
-        //configura el perfil para que no sea editable si es de un amigo
-        var amigoId=intent.getStringExtra("idAmigo")
+
         if(amigoId!=null){
             uid=amigoId
             var imgEditar:ImageView=findViewById(R.id.imgEditar)
             imgEditar.visibility= View.INVISIBLE
             val btnAddAmigos = findViewById<ImageButton>(R.id.btnAddAmigos)
             btnAddAmigos.visibility=View.INVISIBLE
+            btnCerrarSesion.visibility=View.INVISIBLE
         }
 
         cargarAmigos()

@@ -1,9 +1,12 @@
 package mx.edu.potros.viajesengrupo
 
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
@@ -88,6 +91,28 @@ class MisViajes : AppCompatActivity() {
         fotosViajes.add(R.drawable.guadalajara)
         fotosViajes.add(R.drawable.monterrey)
 
+        val btnUnirse=findViewById<Button>(R.id.btnUnirse)
+        btnUnirse.setOnClickListener {
+            var input:EditText=EditText(this)
+            input.inputType= InputType.TYPE_CLASS_TEXT
+            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+
+            builder.setMessage("Código del viaje")
+                .setPositiveButton("Aceptar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        unirseViaje(input.text.toString())
+                        dialog.dismiss()
+                    })
+                .setNegativeButton("Cancelar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        dialog.cancel()
+                    })
+                .setView(input)
+                .setIcon(R.drawable.airplane)
+            builder.create()
+
+            builder.show()
+        }
        /* var listview: ListView = findViewById(R.id.mis_viajes_lv) as ListView
 
         var adaptador: AdaptadorViajes = AdaptadorViajes(this,misViajes)
@@ -129,6 +154,94 @@ class MisViajes : AppCompatActivity() {
         }
         list.addView(vista)
 
+    }
+
+    fun unirseViaje(codigoViaje:String){
+        var cantAmigos=0
+        var codigoValido=false
+        viajesRef.orderByChild("codigoViaje")
+            .equalTo(codigoViaje)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(
+                    snapshot: DataSnapshot,
+                    previousChildName: String?
+                ) {
+                    val datosViaje = snapshot.value as HashMap<*, *>
+                    val codigo = datosViaje["codigoViaje"] as String
+
+                    var yaSeUnio=false
+                    //si el codigo del viaje es valido
+                    //añadir amigo a viaje
+
+                    if(codigoViaje==codigo){
+                        var viajeId = snapshot.key.toString()
+                        viajesRef.child(viajeId!!)
+                            .child("amigos")
+                            .addValueEventListener(object : ValueEventListener {//revisar si el usuario ya es parte del viaje
+                                override fun onDataChange(snapshot: DataSnapshot) {
+
+                                    //funciona mientras no elimines amigos
+                                    if(snapshot.value!=null){
+                                        cantAmigos = snapshot.childrenCount.toInt()
+                                        val datosAmigos = snapshot.value as ArrayList<String>
+
+                                        if(datosAmigos.contains(usuarioId)){
+                                            yaSeUnio=true
+                                        }
+                                    }
+                                }
+                                override fun onCancelled(error: DatabaseError) {
+                                }
+
+                            })
+                        if(!yaSeUnio){
+                            //Se registra el amigo a este viaje
+                            val map: MutableMap<String, Any> = HashMap()
+                            map[(cantAmigos + 1).toString()] = usuarioId!!
+                            viajesRef.child(viajeId).child("amigos").updateChildren(map)
+                            codigoValido=true
+                            //finish()
+                        }
+
+                    }
+                }
+                override fun onChildChanged(
+                    snapshot: DataSnapshot,
+                    previousChildName: String?
+                ) {
+
+                }
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+
+                }
+                override fun onChildMoved(
+                    snapshot: DataSnapshot,
+                    previousChildName: String?
+                ) {
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+        if(codigoValido){
+            finish()
+            startActivity(intent)
+        }
+        else{
+            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+
+            builder.setMessage("Código invalido")
+                .setPositiveButton("Aceptar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        dialog.dismiss()
+                    })
+            builder.create()
+            builder.show()
+        }
     }
 
 

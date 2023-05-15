@@ -1,6 +1,7 @@
 package mx.edu.potros.viajesengrupo
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -112,9 +113,9 @@ class AgregarAmigo : AppCompatActivity() {
                                                 //funciona mientras no elimines amigos
                                                 if(snapshot.value!=null){
                                                     cantAmigos = snapshot.childrenCount.toInt()
-                                                    val datosAmigos = snapshot.value as ArrayList<String>
+                                                    //val datosAmigos = snapshot.value as ArrayList<String>
 
-                                                    if(datosAmigos.contains(amigoId)){
+                                                    if(snapshot.key==amigoId){
                                                         yaSonAmigos=true
                                                     }
                                                 }
@@ -126,11 +127,15 @@ class AgregarAmigo : AppCompatActivity() {
                                     if(!yaSonAmigos){
                                         //Se registra el amigo a este usuario
                                         val map: MutableMap<String, Any> = HashMap()
-                                        map[(cantAmigos + 1).toString()] = amigoId
+                                        map[amigoId] = amigoId
                                         userRef.child(usuarioId!!).child("amigos").updateChildren(map)
                                         codigoValido=true
                                         handled = true
+
                                         //finish()
+                                    }
+                                    else{
+
                                     }
 
                                 }
