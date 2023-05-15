@@ -14,6 +14,7 @@ import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -24,7 +25,8 @@ import java.util.zip.Inflater
 class Perfil : AppCompatActivity() {
     private val File = 1
     private val database = Firebase.database
-//    val myRef = database.getReference("Usuarios")
+    private lateinit var auth: FirebaseAuth
+    //    val myRef = database.getReference("Usuarios")
     lateinit var listViajesRealizados:LinearLayout
     var viajesR = ArrayList<ViajesRealizadosObject>()
     var amigosId=ArrayList<String>()
@@ -34,8 +36,22 @@ class Perfil : AppCompatActivity() {
     val userRef = database.getReference("Usuarios").child(uid!!)
     //   private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
+        auth = Firebase.auth
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
+
+        val btnCerrarSesion = findViewById<Button>(R.id.logoutButton)
+        btnCerrarSesion.setOnClickListener {
+            // llama a FirebaseAuth para cerrar la sesión actual
+            auth.signOut()
+
+            // muestra un mensaje de éxito y envía al usuario a la pantalla de inicio de sesión
+            Toast.makeText(baseContext, "Cerraste sesión correctamente", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, IniciarSesion::class.java)
+            startActivity(intent)
+
+            finish()
+        }
 
         // Empieza :D
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)

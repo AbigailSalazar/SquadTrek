@@ -1,44 +1,33 @@
 package mx.edu.potros.viajesengrupo
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import java.util.ArrayList
 
 class Home : AppCompatActivity() {
+    var misViajes = HashMap<ImageView, Viaje>()
+    lateinit var list: LinearLayout
+
     private val mAuth = FirebaseAuth.getInstance().currentUser
-
-//    var viajes: ArrayList<Viajes> = ArrayList<Viajes>()
-
+    val usuarioId = mAuth?.uid
+    private val userRef = FirebaseDatabase.getInstance().getReference("Usuarios")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
 
-
+        list=findViewById(R.id.home_ly)
         // Empieza :D
-        val ibGiadalajara = findViewById<ImageView>(R.id.guadalajara_home_img_iv)
-        val ibMonterrey = findViewById<ImageView>(R.id.monterrey_home_img_iv)
-
-        ibGiadalajara.setOnClickListener {
-            val intent = Intent(this, TuViaje::class.java)
-            startActivity(intent)
-        }
-
-        ibMonterrey.setOnClickListener {
-            val intent = Intent(this, TuViaje::class.java)
-            startActivity(intent)
-        }
-
-        val btnBack:Button = findViewById(R.id.btnBack)
+        val btnBack: Button = findViewById(R.id.btnBack)
         btnBack.visibility = View.INVISIBLE
 
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
@@ -84,9 +73,10 @@ class Home : AppCompatActivity() {
         }
         // termina :D
 
+        cargarViajes()
+
         var nameTv: TextView = findViewById(R.id.usernameTv)
         val uid = mAuth?.uid
-
         val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!)
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -102,63 +92,64 @@ class Home : AppCompatActivity() {
         })
 
 
-
-
-//        agregarViajes()
-//
-//        var listview: ListView=findViewById(R.id.listview_home)
-//
-//        var adaptadpr: AdaptadorViajes = AdaptadorViajes(this, viajes)
-//        listview.adapter = adaptadpr
     }
 
-//    fun agregarViajes(){
-//        viajes.add(Viajes("Guadalajara, Jalisco",R.drawable.guadalajara,R.drawable.round_circle, "",""))
-//        viajes.add(Viajes("Monterrey, Nuevo León",R.drawable.monterrey,R.drawable.round_circle, "",""))
-//    }
-//
-//    private class AdaptadorViajes: BaseAdapter {
-//        var viajes=ArrayList<Viajes>()
-//        var contexto: Context?=null
-//
-//        constructor(contexto: Context, viajes: ArrayList<Viajes>){
-//            this.viajes=viajes
-//            this.contexto=contexto
-//        }
-//
-//        override fun getCount(): Int {
-//            return viajes.size
-//        }
-//
-//        override fun getItem(position: Int): Any {
-//            return viajes[position]
-//        }
-//
-//        override fun getItemId(position: Int): Long {
-//            return position.toLong()
-//        }
-//
-//        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-//            var viaj=viajes[position]
-//            var inflador=LayoutInflater.from(contexto)
-//            var vista=inflador.inflate(R.layout.mis_viajes_view, null)
-//
-//            var lugar=vista.findViewById(R.id.mis_viajes_lugar_tv) as TextView
-//            var imagen=vista.findViewById(R.id.mis_viajes_imagen_iv) as ImageView
-//            var fecha=vista.findViewById(R.id.mis_viajes_rango_fechas_tv) as TextView
-//            var amigos=vista.findViewById(R.id.amigo1) as ImageView
-//            var fechas=vista.findViewById(R.id.fechas_mis_viajes) as TextView
-//
-//
-//            lugar.setText(viaj.lugar)
-//            imagen.setImageResource(viaj.imagen)
-//            amigos.setImageResource(viaj.amigos)
-//            fecha.setText(viaj.fechas)
-//            fechas.setText(viaj.fechas)
-//
-//            return vista
-//
-//        }
-//    }
+    fun addViaje(viaje: Viaje) {
+        var inflador = LayoutInflater.from(this);
+        var vista = inflador.inflate(R.layout.home_view, null)
 
+        var lugar = vista.findViewById(R.id.home_lugar_tv) as TextView
+        var imagen = vista.findViewById(R.id.home_imagen_iv) as ImageView
+        //var amigos=vista.findViewById(R.id.amigo1) as ImageView
+
+
+        lugar.setText(viaje.ubicacion)
+        imagen.setImageResource(R.drawable.cdmx)
+        misViajes.set(imagen, viaje)
+        imagen.setOnClickListener {
+            val intent = Intent(this, TuViaje::class.java)
+            TuViaje.viajeSeleccionado(misViajes.get(imagen)!!)
+            startActivity(intent)
+        }
+        list.addView(vista)
+    }
+
+    //cargar viajes desde firebase
+    fun cargarViajes() {
+        val viajesListener = object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val viajeId = snapshot.key
+                val datosViaje = snapshot.value as HashMap<*, *>
+                val ubicacion = datosViaje["ubicacion"] as String
+                val fechaInicio = datosViaje["fechaInicio"] as String
+                val fechaFinal = datosViaje["fechaFinal"] as String
+
+                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
+
+                addViaje(nuevoViaje)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle child changed event if needed
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                // Handle child removed event if needed
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle child moved event if needed
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
+            }
+        }
+
+        if (usuarioId != null) {
+            userRef.child(usuarioId)
+                .child("viajesEnProceso")
+                .addChildEventListener(viajesListener)
+        }
+    }
 }
