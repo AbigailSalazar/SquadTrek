@@ -167,7 +167,7 @@ class MisViajes : AppCompatActivity() {
                     previousChildName: String?
                 ) {
                     val datosViaje = snapshot.value as HashMap<*, *>
-                    val codigo = datosViaje["codigoViaje"] as String
+                    val codigo = snapshot.key
 
                     var yaSeUnio=false
                     //si el codigo del viaje es valido

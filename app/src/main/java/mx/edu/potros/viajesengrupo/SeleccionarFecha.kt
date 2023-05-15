@@ -125,7 +125,7 @@ class SeleccionarFecha : AppCompatActivity() {
                 var viajeKey = viajeRefKey.key
 
                 val map: MutableMap<String, Any> = HashMap()
-                map[viajeKey!!] = viajeKey
+                map[viajeKey!!] = viaje.ubicacion
                 userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(map)
                 //guarda viaje en tabla viajes
 

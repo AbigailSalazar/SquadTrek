@@ -297,7 +297,7 @@ class Perfil : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 viajesEnProcesoLy.removeAllViews()
                 for (child in dataSnapshot.children) {
-                    val lugar = child.child("ubicacion").getValue(String::class.java)
+                    val lugar = child.getValue(String::class.java)
                     val itemView = LayoutInflater.from(this@Perfil).inflate(R.layout.viajes_proceso_view, viajesEnProcesoLy, false)
                     itemView.findViewById<TextView>(R.id.placeTv).text = lugar
 
