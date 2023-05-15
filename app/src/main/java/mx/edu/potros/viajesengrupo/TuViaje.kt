@@ -24,15 +24,18 @@ class TuViaje : AppCompatActivity() {
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     private val listDias=ArrayList<Button>()
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
+    var viajeKey=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tu_viaje)
 
-     /*   agregarViajes()
-        var listview: ListView = findViewById(R.id.listview_tu_viaje) as ListView
-        var adaptador: TuViaje.AdaptadorViajes = TuViaje.AdaptadorViajes(this, tuViajes)
-        listview.adapter = adaptador
-*/
+        viajeKey= this.intent.getStringExtra("viajeKey").toString()
+
+        /*   agregarViajes()
+           var listview: ListView = findViewById(R.id.listview_tu_viaje) as ListView
+           var adaptador: TuViaje.AdaptadorViajes = TuViaje.AdaptadorViajes(this, tuViajes)
+           listview.adapter = adaptador
+   */
 
         // Empieza :D
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
@@ -85,6 +88,7 @@ class TuViaje : AppCompatActivity() {
         val btnTodolist = findViewById<TextView>(R.id.tu_viaje_todolist_tv)
         btnTodolist.setOnClickListener {
             val intent = Intent(this, ToDoList::class.java)
+            intent.putExtra("viajeKey", viajeSel.id)
             startActivity(intent)
         }
         val gridBtnEventos=findViewById<GridLayout>(R.id.gridBtnEventos)

@@ -278,6 +278,20 @@
 
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/logoutButton"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="35dp"
+                        android:layout_marginBottom="100dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/round_button"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:textSize="@dimen/body_text"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:text="Cerrar sesión" />
+
                 </LinearLayout>
 
 
