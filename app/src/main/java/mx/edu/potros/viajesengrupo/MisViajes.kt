@@ -193,41 +193,6 @@ class MisViajes : AppCompatActivity() {
 
         viajesRef.addChildEventListener(viajeListener)
 
-//        val viajesListener = object : ChildEventListener {
-//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-//                val viajeId = snapshot.key
-//                val datosViaje = snapshot.value as HashMap<*, *>
-//                val ubicacion = datosViaje["ubicacion"] as String
-//                val fechaInicio = datosViaje["fechaInicio"] as String
-//                val fechaFinal = datosViaje["fechaFinal"] as String
-//
-//                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
-//
-//                addViaje(nuevoViaje)
-//            }
-//
-//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//                // Handle child changed event if needed
-//            }
-//
-//            override fun onChildRemoved(snapshot: DataSnapshot) {
-//                // Handle child removed event if needed
-//            }
-//
-//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-//                // Handle child moved event if needed
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
-//            }
-//        }
-//
-//        if (usuarioId != null) {
-//            userRef.child(usuarioId)
-//                .child("viajesEnProceso")
-//                .addChildEventListener(viajesListener)
-//        }
     }
 
 

@@ -16,10 +16,11 @@ import java.util.ArrayList
 class Home : AppCompatActivity() {
     var misViajes = HashMap<ImageView, Viaje>()
     lateinit var list: LinearLayout
-
+    var viajesids=ArrayList<String>()
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     private val userRef = FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -116,40 +117,64 @@ class Home : AppCompatActivity() {
 
     //cargar viajes desde firebase
     fun cargarViajes() {
-        val viajesListener = object : ChildEventListener {
+        //obtiene las referencias a los viajes del usuario
+        val viajesListener = object :  ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val viajeId = snapshot.key
-                val datosViaje = snapshot.value as HashMap<*, *>
-                val ubicacion = datosViaje["ubicacion"] as String
-                val fechaInicio = datosViaje["fechaInicio"] as String
-                val fechaFinal = datosViaje["fechaFinal"] as String
-
-                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
-
-                addViaje(nuevoViaje)
+                val datosAmigos = snapshot.getValue()
+                viajesids.add(datosAmigos.toString())
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle child changed event if needed
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                // Handle child removed event if needed
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle child moved event if needed
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
+            override fun onCancelled(error: DatabaseError) {
             }
+
         }
 
-        if (usuarioId != null) {
-            userRef.child(usuarioId)
-                .child("viajesEnProceso")
-                .addChildEventListener(viajesListener)
+        //obtiene los objetos viaje de la tabla viajes
+        val viajeListener = object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                if(viajesids.contains(snapshot.key)){
+                    val viajeId = snapshot.key
+                    val datosViaje = snapshot.value as HashMap<*, *>
+                    val ubicacion = datosViaje["ubicacion"] as String
+                    val fechaInicio = datosViaje["fechaInicio"] as String
+                    val fechaFinal = datosViaje["fechaFinal"] as String
+
+                    val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
+                    addViaje(nuevoViaje)
+                }
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
         }
+
+        userRef.child(usuarioId!!)
+            .child("viajesEnProceso").addChildEventListener(viajesListener)
+
+        viajesRef.addChildEventListener(viajeListener)
+
     }
 }
