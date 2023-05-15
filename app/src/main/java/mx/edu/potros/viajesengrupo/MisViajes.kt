@@ -7,24 +7,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import java.util.ArrayList
+import com.google.firebase.database.*
+import retrofit2.Response
+import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
+import kotlin.random.Random
 
 
 class MisViajes : AppCompatActivity() {
     var misViajes= HashMap<ImageView,Viaje>()
-    //var viajesids=HashMap<ImageView,String>()
+    var viajesids=ArrayList<String>()
     lateinit var list:LinearLayout
-
+    var fotosViajes=ArrayList<Int>()
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_viajes)
@@ -82,6 +84,9 @@ class MisViajes : AppCompatActivity() {
         agregarViajes()
         cargarViajes()
 
+        fotosViajes.add(R.drawable.cdmx)
+        fotosViajes.add(R.drawable.guadalajara)
+        fotosViajes.add(R.drawable.monterrey)
 
        /* var listview: ListView = findViewById(R.id.mis_viajes_lv) as ListView
 
@@ -110,7 +115,10 @@ class MisViajes : AppCompatActivity() {
 
 
         lugar.setText(viaje.ubicacion)
-        imagen.setImageResource(R.drawable.cdmx)
+
+//        var imgRandom=Random.nextInt(0,fotosViajes.size-1)
+            imagen.setImageResource(R.drawable.cdmx)
+
         fecha.setText(viaje.fechaInicio+" a "+ viaje.fechaFinal)
         misViajes.set(imagen,viaje)
         imagen.setOnClickListener {
@@ -119,7 +127,6 @@ class MisViajes : AppCompatActivity() {
             //intent.putExtra("viajeKey",viajesids.get(imagen))
             startActivity(intent)
         }
-
         list.addView(vista)
 
     }
@@ -127,117 +134,102 @@ class MisViajes : AppCompatActivity() {
 
     //cargar viajes desde firebase
     fun cargarViajes() {
-        val viajesListener = object : ChildEventListener {
+        //obtiene las referencias a los viajes del usuario
+        val viajesListener = object :  ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val viajeId = snapshot.key
-                val datosViaje = snapshot.value as HashMap<*, *>
-                val ubicacion = datosViaje["ubicacion"] as String
-                val fechaInicio = datosViaje["fechaInicio"] as String
-                val fechaFinal = datosViaje["fechaFinal"] as String
-
-                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
-
-                addViaje(nuevoViaje)
+                val datosAmigos = snapshot.getValue()
+                viajesids.add(datosAmigos.toString())
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle child changed event if needed
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                // Handle child removed event if needed
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle child moved event if needed
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
+            override fun onCancelled(error: DatabaseError) {
             }
+
         }
 
-        if (usuarioId != null) {
-            userRef.child(usuarioId)
-                .child("viajesEnProceso")
-                .addChildEventListener(viajesListener)
+        //obtiene los objetos viaje de la tabla viajes
+        val viajeListener = object : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                if(viajesids.contains(snapshot.key)){
+                    val viajeId = snapshot.key
+                    val datosViaje = snapshot.value as HashMap<*, *>
+                    val ubicacion = datosViaje["ubicacion"] as String
+                    val fechaInicio = datosViaje["fechaInicio"] as String
+                    val fechaFinal = datosViaje["fechaFinal"] as String
+
+                    val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
+                    addViaje(nuevoViaje)
+                }
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
         }
-    }
 
+        userRef.child(usuarioId!!)
+            .child("viajesEnProceso").addChildEventListener(viajesListener)
 
-//    fun llenarListaViajes(listEventos: LinearLayout){
-//        misViajes.forEach {
-//            var inflador=LayoutInflater.from(this);
-//            var vista=inflador.inflate(R.layout.mis_viajes_view,null)
+        viajesRef.addChildEventListener(viajeListener)
+
+//        val viajesListener = object : ChildEventListener {
+//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                val viajeId = snapshot.key
+//                val datosViaje = snapshot.value as HashMap<*, *>
+//                val ubicacion = datosViaje["ubicacion"] as String
+//                val fechaInicio = datosViaje["fechaInicio"] as String
+//                val fechaFinal = datosViaje["fechaFinal"] as String
 //
+//                val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
 //
-//            var lugar=vista.findViewById(R.id.mis_viajes_lugar_tv) as TextView
-//            var imagen=vista.findViewById(R.id.mis_viajes_imagen_iv) as ImageView
-//            var fecha=vista.findViewById(R.id.mis_viajes_rango_fechas_tv) as TextView
-//            var amigos=vista.findViewById(R.id.amigo1) as ImageView
-//
-//            lugar.setText(it.ubicacion)
-//            imagen.setImageResource(R.drawable.cdmx)
-//            fecha.setText(it.fechaInicio+" a "+ it.fechaFinal)
-//
-//            viajesids.set(imagen,it)
-//
-//            imagen.setOnClickListener {
-//
-//                TuViaje.viajeSeleccionado(viajesids.get(imagen)!!)
-//
-//                val intent = Intent(this, TuViaje::class.java)
-//                startActivity(intent)
+//                addViaje(nuevoViaje)
 //            }
 //
+//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                // Handle child changed event if needed
+//            }
 //
-//            listEventos.addView(vista)
+//            override fun onChildRemoved(snapshot: DataSnapshot) {
+//                // Handle child removed event if needed
+//            }
+//
+//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//                // Handle child moved event if needed
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                Log.w(ContentValues.TAG, "loadEvento:onCancelled", databaseError.toException())
+//            }
 //        }
-//    }
+//
+//        if (usuarioId != null) {
+//            userRef.child(usuarioId)
+//                .child("viajesEnProceso")
+//                .addChildEventListener(viajesListener)
+//        }
+    }
 
-
-
-/*
-    private class AdaptadorViajes: BaseAdapter {
-        var viajes=ArrayList<Viajes>()
-        var contexto: Context?=null
-
-        constructor(contexto: Context, viajes: ArrayList<Viajes>){
-            this.viajes=viajes
-            this.contexto=contexto
-        }
-
-        override fun getCount(): Int {
-            return viajes.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return viajes[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var viaj=viajes[position]
-            var inflador= LayoutInflater.from(contexto)
-            var vista=inflador.inflate(R.layout.mis_viajes_view, null)
-
-            var lugar=vista.findViewById(R.id.mis_viajes_lugar_tv) as TextView
-            var imagen=vista.findViewById(R.id.mis_viajes_imagen_iv) as ImageView
-            var fecha=vista.findViewById(R.id.mis_viajes_rango_fechas_tv) as TextView
-            var amigos=vista.findViewById(R.id.amigo1) as ImageView
-
-            lugar.setText(viaj.lugar)
-           imagen.setImageResource(viaj.imagen)
-            amigos.setImageResource(viaj.amigos)
-            fecha.setText(viaj.fechas)
-
-            return vista
-
-        }
-   }*/
 
 
 

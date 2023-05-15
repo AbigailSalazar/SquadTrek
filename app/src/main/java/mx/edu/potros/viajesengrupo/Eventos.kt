@@ -21,6 +21,7 @@ import com.google.firebase.database.ktx.getValue
 class Eventos : AppCompatActivity() {
 
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     var eventos = ArrayList<Evento>();
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
@@ -143,9 +144,7 @@ class Eventos : AppCompatActivity() {
             }
         }
 
-        userRef.child(usuarioId!!)
-            .child("viajesEnProceso")
-            .child(viajeKey)
+        viajesRef.child(viajeKey)
             .child("eventos")
             .child(fechaEvento!!.replace("/","-")).addChildEventListener(eventosListener)
     }

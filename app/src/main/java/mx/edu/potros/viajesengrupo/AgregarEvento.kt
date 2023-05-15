@@ -21,6 +21,7 @@ class AgregarEvento : AppCompatActivity() {
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     lateinit var txtEncargado:TextView
     private lateinit var btnAddEncargado:Button
 
@@ -186,9 +187,7 @@ class AgregarEvento : AppCompatActivity() {
                 //guarda un nuevo evento con el id del usuario
                 if(viajeId!=null){
                     if (usuarioId != null) {
-                        userRef.child(usuarioId)
-                            .child("viajesEnProceso")
-                            .child(viajeId)
+                        viajesRef.child(viajeId)
                             .child("eventos")
                             .child(dia!!.replace("/","-"))
                             .push()

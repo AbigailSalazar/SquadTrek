@@ -9,16 +9,22 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SeleccionarFecha : AppCompatActivity() {
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     //val usuarioId="-NUileJDCu_cQMfcael9"
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccionar_fecha)
@@ -109,16 +115,23 @@ class SeleccionarFecha : AppCompatActivity() {
                     ArrayList()
                 )
 
-                //obtiene el id del nuevo viaje
-                var viajeRef = userRef.child(usuarioId!!)
-                    .child("viajesEnProceso")
+                viaje.amigos.add(usuarioId!!)
+                var cantViajes=0
+                //obtiene el id del nuevo viaje y lo guarda en el usuario
+
+                var viajeRefKey = viajesRef
                     .push()
 
-                var viajeKey = viajeRef.key
+                var viajeKey = viajeRefKey.key
+
+                val map: MutableMap<String, Any> = HashMap()
+                map[viajeKey!!] = ""
+                userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(map)
+                //guarda viaje en tabla viajes
 
                 //guardar viaje en bd
                 if (viajeKey != null) {
-                    viajeRef.setValue(viaje).addOnSuccessListener {
+                    viajesRef.child(viajeKey!!).setValue(viaje).addOnSuccessListener {
                         TuViaje.viajeSeleccionado(viaje)
                         val intent = Intent(this, AgregarAmigoViaje::class.java)
                         intent.putExtra("viajeKey",viajeKey)
