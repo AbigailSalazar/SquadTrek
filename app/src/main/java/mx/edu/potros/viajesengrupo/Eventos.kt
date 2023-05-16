@@ -126,7 +126,7 @@ class Eventos : AppCompatActivity() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
+                    startActivity(intent)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -177,6 +177,10 @@ class Eventos : AppCompatActivity() {
             intent.putExtra("ubicacion", evento.ubicacion)
             intent.putExtra("idAmigo", evento.encargado.id)
             intent.putExtra("encargado",evento.encargado.username)
+            intent.putExtra("encargadoFoto",evento.encargado.foto)
+            intent.putExtra("dia",fechaEvento)
+            intent.putExtra("viajeKey",viajeKey)
+
             startActivity(intent)
         }
 
@@ -216,8 +220,15 @@ class Eventos : AppCompatActivity() {
 //            var btnEditarEvento:ImageView=findViewById(R.id.btnEditEvento)
 //            btnEditarEvento.setOnClickListener {
 //                val intent = Intent(this, AgregarEvento::class.java)
-//                intent.putExtra("idEvento", key)
-//                startActivity(intent)
+//            intent.putExtra("idEvento", key)
+//            intent.putExtra("titulo", evento.titulo)
+//            intent.putExtra("hora", evento.hora)
+//            intent.putExtra("ubicacion", evento.ubicacion)
+//            intent.putExtra("idAmigo", evento.encargado.id)
+//            intent.putExtra("encargado",evento.encargado.username)
+//            intent.putExtra("encargadoFoto",evento.encargado.foto)
+//            intent.putExtra("dia",fechaEvento)
+//            intent.putExtra("viajeKey",viajeKey)
 //            }
 
             Glide.with(this@Eventos)

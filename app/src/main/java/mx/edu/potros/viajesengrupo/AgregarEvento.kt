@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.ref.WeakReference
+import java.util.HashMap
 
 
 class AgregarEvento : AppCompatActivity() {
@@ -42,6 +43,9 @@ class AgregarEvento : AppCompatActivity() {
             hora=intent.getStringExtra("hora")!!
             ubicacion=intent.getStringExtra("ubicacion")!!
             encargado=intent.getStringExtra("encargado")!!
+            var idAmigo=intent.getStringExtra("idAmigo")
+            var encargadoFoto=intent.getStringExtra("encargadoFoto")
+            amigoSel=Usuario(idAmigo!!,encargado,encargadoFoto!!,ArrayList(),"","",ArrayList())
         }
 
 
@@ -198,7 +202,6 @@ class AgregarEvento : AppCompatActivity() {
         }
 
 
-
         //guardar evento en la bd
         var btnAceptar:Button= findViewById(R.id.btnAceptar)
         btnAceptar.setOnClickListener {
@@ -206,36 +209,74 @@ class AgregarEvento : AppCompatActivity() {
             val ubicacion=txtUbicacion.text.toString()
             val hora=txtHora.text.toString()
 
-            if(amigoSel.id!=""&&nombre.isNotBlank()&&ubicacion.isNotBlank()&&hora.isNotBlank()){
-                //cambiar dependiendo de cual viaje sea y dia
-                var viajeId=this.intent.getStringExtra("viajeKey")
-                var dia=this.intent.getStringExtra("dia")
-                val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
+            if(idEvento!=null){
+                if(amigoSel.id!=""&&nombre.isNotBlank()&&ubicacion.isNotBlank()&&hora.isNotBlank()){
+                    //cambiar dependiendo de cual viaje sea y dia
+                    var viajeId=this.intent.getStringExtra("viajeKey")
+                    var dia=this.intent.getStringExtra("dia")
 
-                //guarda un nuevo evento con el id del usuario
-                if(viajeId!=null){
-                    if (usuarioId != null) {
-                        viajesRef.child(viajeId)
-                            .child("eventos")
-                            .child(dia!!.replace("/","-"))
-                            .push()
-                            .setValue(evento)
+                    val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
 
+                    //guarda un nuevo evento con el id del usuario
+                    if(viajeId!=null){
+                        val updateMap: MutableMap<String, Any> = HashMap()
+                        updateMap["titulo"] = nombre
+                        updateMap["ubicacion"] = ubicacion
+                        updateMap["hora"] = hora
+                        updateMap["encargado"]=evento.encargado
+
+                        if (usuarioId != null) {
+                            viajesRef.child(viajeId)
+                                .child("eventos")
+                                .child(dia!!.replace("/","-"))
+                                .child(idEvento)
+                                .updateChildren(updateMap)
+                        }
+                        finish()
                     }
-                    finish()
+                }
+                else{
+                    val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+                    builder.setMessage("Informacion incompleta")
+                        .setPositiveButton("Aceptar",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                dialog.dismiss()
+                            })
+                    builder.create()
+                    builder.show()
                 }
             }
             else{
-                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
-                builder.setMessage("Informacion incompleta")
-                    .setPositiveButton("Aceptar",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            dialog.dismiss()
-                        })
-                builder.create()
-                builder.show()
-            }
+                if(amigoSel.id!=""&&nombre.isNotBlank()&&ubicacion.isNotBlank()&&hora.isNotBlank()){
+                    //cambiar dependiendo de cual viaje sea y dia
+                    var viajeId=this.intent.getStringExtra("viajeKey")
+                    var dia=this.intent.getStringExtra("dia")
+                    val evento=Evento(R.drawable.house,nombre,hora,ubicacion, amigoSel)
 
+                    //guarda un nuevo evento con el id del usuario
+                    if(viajeId!=null){
+                        if (usuarioId != null) {
+                            viajesRef.child(viajeId)
+                                .child("eventos")
+                                .child(dia!!.replace("/","-"))
+                                .push()
+                                .setValue(evento)
+
+                        }
+                        finish()
+                    }
+                }
+                else{
+                    val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+                    builder.setMessage("Informacion incompleta")
+                        .setPositiveButton("Aceptar",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                dialog.dismiss()
+                            })
+                    builder.create()
+                    builder.show()
+                }
+            }
         }
 
     }
