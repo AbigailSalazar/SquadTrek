@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -200,11 +199,20 @@ class Eventos : AppCompatActivity() {
                 startActivity(intent)
             }
 
+            var btnEditarEvento:ImageView=findViewById(R.id.btnEditEvento)
+            btnEditarEvento.setOnClickListener {
+                var intent=Intent(this,AgregarEvento::class.java)
+                intent.putExtra("editar","editar")
+                startActivity(intent)
+            }
+
             Glide.with(this@Eventos)
                 .load(it.encargado.foto)
                 .into(imgEncargado)
 
             listEventos.addView(vista)
+
         }
+
     }
 }

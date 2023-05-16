@@ -103,7 +103,7 @@ class Perfil : AppCompatActivity() {
         }
         // termina :D
 
-        var amigosly=findViewById<LinearLayout>(R.id.amigos_ly)
+        cargarAmigos()
 
         val btnAddAmigos = findViewById<ImageButton>(R.id.btnAddAmigos)
         btnAddAmigos.setOnClickListener {
@@ -121,7 +121,7 @@ class Perfil : AppCompatActivity() {
             btnCerrarSesion.visibility=View.INVISIBLE
         }
 
-        cargarAmigos()
+
         var nameTv: TextView = findViewById(R.id.usernameTv)
         val userRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!)
         userRef.addValueEventListener(object : ValueEventListener {
@@ -296,6 +296,51 @@ class Perfil : AppCompatActivity() {
             }
         })
 
+
+        val layoutAmigos: LinearLayout = findViewById(R.id.amigos_ly)
+        val userRefAmigos = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!).child("amigos")
+        userRefAmigos.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (child in dataSnapshot.children) {
+                    val amigoId = child.getValue(String::class.java)
+                    println("Clave amigo: "+ amigoId)
+                    val fotoRef = FirebaseDatabase.getInstance().getReference("Fotos").child(amigoId!!)
+                    fotoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists() && dataSnapshot.hasChild("foto")) {
+                                val fotoUrl = dataSnapshot.child("foto").value.toString()
+
+                                // Inflar la vista personalizada
+                                val itemView = LayoutInflater.from(this@Perfil).inflate(R.layout.amigo_view, layoutAmigos, false)
+                                val amigoImg = itemView.findViewById<ImageView>(R.id.amigoImg)
+
+                                // Cargar la imagen utilizando Glide
+                                Glide.with(this@Perfil)
+                                    .load(fotoUrl)
+                                    .error(R.drawable.round_circle)
+                                    .into(amigoImg)
+
+                                layoutAmigos.addView(itemView)
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.d("TAG", "Error al leer la URL de la foto del amigo", databaseError.toException())
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "Error al obtener la lista de amigos", error.toException())
+            }
+        })
+
+
+
+
+
+
         val viajesEnProcesoLy: LinearLayout = findViewById(R.id.viajesEnProcesoLy)
         val userRefViaEnProc = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid!!).child("viajesEnProceso")
         userRefViaEnProc.addValueEventListener(object : ValueEventListener {
@@ -408,6 +453,7 @@ class Perfil : AppCompatActivity() {
             .child("amigos").addChildEventListener(amigosListener)
 
         userRef.addChildEventListener(usuariosListener)
+
     }
     fun cargarFoto(fotoUrl: String) {
         var inflater=LayoutInflater.from(this)

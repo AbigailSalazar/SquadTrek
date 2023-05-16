@@ -9,7 +9,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,7 +29,10 @@ class SeleccionarFecha : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seleccionar_fecha)
 
+        var ubicacion=intent.getStringExtra("ubicacion")
         var calendarView: CalendarView = findViewById(R.id.calendarioInicio)
+        val editar = intent.getStringExtra("editar")
+
 
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
         btnNavAdd.setOnClickListener {
@@ -81,92 +87,179 @@ class SeleccionarFecha : AppCompatActivity() {
         var calendarFinal: CalendarView = findViewById(R.id.calendarioFinal)
 
         //si viene a editar
-        var edFechaInicio=intent.getStringExtra("fechaInicio")
-        var edFechaFinal=intent.getStringExtra("fechaFinal")
+        var edFechaInicio = intent.getStringExtra("fechaInicio")
+        var edFechaFinal = intent.getStringExtra("fechaFinal")
 
 
-        var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyyy");
+        var dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy");
 
-        if(edFechaInicio!=null){
-            calendarInicio.date=dateFormat.parse(edFechaInicio).time
-            calendarFinal.date=dateFormat.parse(edFechaFinal).time
+        if (edFechaInicio != null) {
+            calendarInicio.date = dateFormat.parse(edFechaInicio).time
+            calendarFinal.date = dateFormat.parse(edFechaFinal).time
         }
 
-        var fechaInicio=dateFormat.format(calendarInicio.date)
-        var fechaFinal=dateFormat.format(calendarFinal.date)
+        var fechaInicio = dateFormat.format(calendarInicio.date)
+        var fechaFinal = dateFormat.format(calendarFinal.date)
 
 
-        var date1= Calendar.getInstance()
-        var date2= Calendar.getInstance()
+        var date1 = Calendar.getInstance()
+        var date2 = Calendar.getInstance()
         calendarInicio.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaInicio = "$i3/$i2/$i"
-            date1.set(i,i2,i3)
+            date1.set(i, i2, i3)
         }
         calendarFinal.setOnDateChangeListener { calendarView, i, i2, i3 ->
             fechaFinal = "$i3/$i2/$i"
-            date2.set(i,i2,i3)
+            date2.set(i, i2, i3)
         }
 
-        //pasar id del viaje guardado
-
-        val btnContinuar:Button=findViewById(R.id.btnSiguiente2)
+        val btnContinuar: Button = findViewById(R.id.btnSiguiente2)
         btnContinuar.setOnClickListener {
-
-            //valida la fecha
-            if((date1.before(date2))){
-                var viaje = Viaje("",
+            // Valida la fecha
+            if (date1.before(date2)) {
+                val viaje = Viaje(
+                    "",
                     fechaInicio,
                     fechaFinal,
                     ArrayList(),
                     ubicacionSel,
                     ArrayList()
                 )
-
                 viaje.amigos.add(usuarioId!!)
-                var cantViajes=0
-                //obtiene el id del nuevo viaje y lo guarda en el usuario
 
-                var viajeRefKey = viajesRef
-                    .push()
+                if (editar=="editar"){
+                    userRef.child(usuarioId).child("viajesEnProceso")
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    val viajesEnProcesoMap = dataSnapshot.value as? Map<*, *>
+                                    val viajeKey = viajesEnProcesoMap?.keys?.firstOrNull() as? String
 
-                var viajeKey = viajeRefKey.key
+                                    if (viajeKey != null) {
+                                        val updateMap: MutableMap<String, Any> = HashMap()
+                                        updateMap["fechaInicio"] = viaje.fechaInicio
+                                        updateMap["fechaFinal"] = viaje.fechaFinal
+                                        updateMap["ubicacion"] = viaje.ubicacion
 
-                val map: MutableMap<String, Any> = HashMap()
-                map[viajeKey!!] = viaje.ubicacion
-                userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(map)
-                //guarda viaje en tabla viajes
+                                        viajesRef.child(viajeKey).updateChildren(updateMap)
+                                            .addOnSuccessListener {
+                                                val usuariosMap: MutableMap<String, Any> = HashMap()
+                                                usuariosMap["$usuarioId/viajesEnProceso/$viajeKey"] =
+                                                    viaje.ubicacion
 
-                //guardar viaje en bd
-                if (viajeKey != null) {
-                    viajesRef.child(viajeKey!!).setValue(viaje).addOnSuccessListener {
-                        TuViaje.viajeSeleccionado(viaje)
-                        val intent = Intent(this, AgregarAmigoViaje::class.java)
-                        intent.putExtra("viajeKey",viajeKey)
-                        if (viajeKey != null) {
-                            Log.d("VIAJE_ADDED", viajeKey)
-                        }
-                        startActivity(intent)
-                        finish()
-                    }
+                                                userRef.updateChildren(usuariosMap)
+                                                    .addOnSuccessListener {
+                                                        TuViaje.viajeSeleccionado(viaje)
+                                                        val intent = Intent(
+                                                            this@SeleccionarFecha,
+                                                            AgregarAmigoViaje::class.java
+                                                        )
+                                                        intent.putExtra("viajeKey", viajeKey)
+                                                        Log.d("VIAJE_EDITED", viajeKey)
+                                                        startActivity(intent)
+                                                        finish()
+                                                    }
+                                                    .addOnFailureListener {
+                                                        Toast.makeText(
+                                                            this@SeleccionarFecha,
+                                                            "Error al actualizar la información en Usuarios",
+                                                            Toast.LENGTH_LONG
+                                                        ).show()
+                                                    }
+                                            }
+                                    } else {
+                                        Toast.makeText(
+                                            this@SeleccionarFecha,
+                                            "No se encontró el viaje correspondiente en viajesEnProceso",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                } else {
+                                    val viajeRefKey = viajesRef.push()
+                                    val newViajeKey = viajeRefKey.key
+
+                                    if (newViajeKey != null) {
+                                        viajeRefKey.setValue(viaje).addOnSuccessListener {
+                                            val usuariosMap: MutableMap<String, Any> = HashMap()
+                                            usuariosMap["$usuarioId/viajesEnProceso/$newViajeKey"] =
+                                                viaje.ubicacion
+                                            userRef.updateChildren(usuariosMap)
+                                                .addOnSuccessListener {
+                                                    TuViaje.viajeSeleccionado(viaje)
+                                                    val intent = Intent(
+                                                        this@SeleccionarFecha,
+                                                        AgregarAmigoViaje::class.java
+                                                    )
+                                                    intent.putExtra("viajeKey", newViajeKey)
+                                                    Log.d("VIAJE_ADDED", newViajeKey)
+                                                    startActivity(intent)
+                                                    finish()
+                                                }
+                                                .addOnFailureListener {
+                                                    Toast.makeText(
+                                                        this@SeleccionarFecha,
+                                                        "Error al actualizar la información en Usuarios",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
+                                        }
+                                    } else {
+                                        Toast.makeText(
+                                            this@SeleccionarFecha,
+                                            "Error al generar el ID del nuevo viaje",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Toast.makeText(
+                                    this@SeleccionarFecha,
+                                    "Error al leer los datos de viajesEnProceso",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
                 }
                 else{
-                    Toast.makeText(this,"Hubo un error, prueba más tarde",Toast.LENGTH_LONG)
+                    var cantViajes=0
+                    //obtiene el id del nuevo viaje y lo guarda en el usuario
+
+                    var viajeRefKey = viajesRef
+                        .push()
+
+                    var viajeKey = viajeRefKey.key
+
+                    val map: MutableMap<String, Any> = HashMap()
+                    map[viajeKey!!] = viaje.ubicacion
+                    userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(map)
+                    //guarda viaje en tabla viajes
+
+                    //guardar viaje en bd
+                    if (viajeKey != null) {
+                        viajesRef.child(viajeKey!!).setValue(viaje).addOnSuccessListener {
+                            TuViaje.viajeSeleccionado(viaje)
+                            val intent = Intent(this, AgregarAmigoViaje::class.java)
+                            intent.putExtra("viajeKey",viajeKey)
+                            if (viajeKey != null) {
+                                Log.d("VIAJE_ADDED", viajeKey)
+                            }
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
                 }
-            }
-            else{
-                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
 
-                builder.setMessage("Fechas invalidas")
-                    .setPositiveButton("Aceptar",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            dialog.dismiss()
-                        })
-                builder.create()
-                builder.show()
+            } else {
+                val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                builder.setMessage("Fechas inválidas")
+                    .setPositiveButton("Aceptar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                builder.create().show()
             }
-
         }
-
     }
 
     companion object{

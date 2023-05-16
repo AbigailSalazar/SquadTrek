@@ -1,7 +1,6 @@
 package mx.edu.potros.viajesengrupo
 
 import android.app.AlertDialog
-import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import retrofit2.Response
 import kotlin.collections.ArrayList
-import kotlin.concurrent.thread
-import kotlin.random.Random
 
 
 class MisViajes : AppCompatActivity() {
@@ -85,6 +81,18 @@ class MisViajes : AppCompatActivity() {
         }
         // termina :D
 
+        var amigoId=intent.getStringExtra("idAmigo")
+
+
+
+
+
+
+
+
+
+
+
         agregarViajes()
         cargarViajes()
 
@@ -137,8 +145,9 @@ class MisViajes : AppCompatActivity() {
         var lugar=vista.findViewById(R.id.mis_viajes_lugar_tv) as TextView
         var imagen=vista.findViewById(R.id.mis_viajes_imagen_iv) as ImageView
         var fecha=vista.findViewById(R.id.mis_viajes_rango_fechas_tv) as TextView
-        var amigosLy=vista.findViewById(R.id.amigos_viaje_ly) as LinearLayout
-        //var amigos=vista.findViewById(R.id.amigo1) as ImageView
+    //    var amigos=vista.findViewById(R.id.amigoImg) as ImageView
+
+
 
 
         lugar.setText(viaje.ubicacion)
@@ -195,18 +204,18 @@ class MisViajes : AppCompatActivity() {
                         viajesRef.child(viajeId!!)
                             .child("amigos")
                             .addValueEventListener(object : ValueEventListener {//revisar si el usuario ya es parte del viaje
-                                override fun onDataChange(snapshot: DataSnapshot) {
+                            override fun onDataChange(snapshot: DataSnapshot) {
 
-                                    //funciona mientras no elimines amigos
-                                    if(snapshot.value!=null){
-                                        cantAmigos = snapshot.childrenCount.toInt()
-                                        val datosAmigos = snapshot.value as ArrayList<String>
+                                //funciona mientras no elimines amigos
+                                if(snapshot.value!=null){
+                                    cantAmigos = snapshot.childrenCount.toInt()
+                                    val datosAmigos = snapshot.value as ArrayList<String>
 
-                                        if(datosAmigos.contains(usuarioId)){
-                                            yaSeUnio=true
-                                        }
+                                    if(datosAmigos.contains(usuarioId)){
+                                        yaSeUnio=true
                                     }
                                 }
+                            }
                                 override fun onCancelled(error: DatabaseError) {
                                 }
 
@@ -251,18 +260,17 @@ class MisViajes : AppCompatActivity() {
                 }
 
             })
-            if(!codigoValido){
-                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+        if(!codigoValido){
+            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
 
-                builder.setMessage("Código invalido")
-                    .setPositiveButton("Aceptar",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            dialog.dismiss()
-                        })
-                builder.create()
-                builder.show()
-            }
-
+            builder.setMessage("Código invalido")
+                .setPositiveButton("Aceptar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        dialog.dismiss()
+                    })
+            builder.create()
+            builder.show()
+        }
 
     }
 

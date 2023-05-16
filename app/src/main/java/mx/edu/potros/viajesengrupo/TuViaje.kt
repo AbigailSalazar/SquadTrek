@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit
 class TuViaje : AppCompatActivity() {
 
     private val mAuth = FirebaseAuth.getInstance().currentUser
-    val usuarioId = mAuth?.uid
+    var uid = mAuth?.uid
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     private val listDias=ArrayList<Button>()
     var tuViajes: ArrayList<Viajes> = ArrayList<Viajes>()
@@ -32,6 +33,7 @@ class TuViaje : AppCompatActivity() {
         setContentView(R.layout.activity_tu_viaje)
 
         viajeKey= this.intent.getStringExtra("viajeKey").toString()
+
 
         /*   agregarViajes()
            var listview: ListView = findViewById(R.id.listview_tu_viaje) as ListView
@@ -87,6 +89,50 @@ class TuViaje : AppCompatActivity() {
             startActivity(intent)
         }
         // termina :D
+
+        val layoutViajesAmigos: LinearLayout = findViewById(R.id.amigos_tu_viaje_ly)
+        val viajesRef = FirebaseDatabase.getInstance().getReference("Viajes")
+        val amigosRef = viajesRef.child(viajeSel.id!!).child("amigos")
+        amigosRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (amigoSnapshot in dataSnapshot.children) {
+                    val amigoId = amigoSnapshot.getValue(String::class.java)
+                    println("Clave viaje amigo: $amigoId")
+                    val fotoRef = FirebaseDatabase.getInstance().getReference("Fotos").child(amigoId!!)
+                    fotoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists() && dataSnapshot.hasChild("foto")) {
+                                val fotoUrl = dataSnapshot.child("foto").value.toString()
+
+                                // Inflar la vista personalizada
+                                val itemView = LayoutInflater.from(this@TuViaje).inflate(R.layout.amigo_view, layoutViajesAmigos, false)
+                                val amigoViajeImg = itemView.findViewById<ImageView>(R.id.amigoImg)
+
+                                // Cargar la imagen utilizando Glide
+                                Glide.with(this@TuViaje)
+                                    .load(fotoUrl)
+                                    .error(R.drawable.round_circle)
+                                    .into(amigoViajeImg)
+
+                                layoutViajesAmigos.addView(itemView)
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.d("TAG", "Error al leer la URL de la foto del amigo", databaseError.toException())
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("TAG", "Error al obtener la lista de amigos del viaje", databaseError.toException())
+            }
+        })
+
+
+
+
 
         var btnAgregarAmigo:ImageButton=findViewById(R.id.btnAddFriends)
         btnAgregarAmigo.setOnClickListener {
@@ -147,7 +193,7 @@ class TuViaje : AppCompatActivity() {
         var lugar=findViewById(R.id.tu_viaje_lugar_tv) as TextView
         var imagen=findViewById(R.id.tu_viaje_imagen_iv) as ImageView
         var fecha=findViewById(R.id.tu_viaje_rango_fechas_tv) as TextView
-        var amigos=findViewById(R.id.amigo1_tu_viaje) as ImageView
+     //   var amigos=findViewById(R.id.amigo1_tu_viaje) as ImageView
 
 
 
@@ -162,16 +208,19 @@ class TuViaje : AppCompatActivity() {
         var btnEditarUbicacion:ImageView=findViewById(R.id.btnEditUbicacion)
         btnEditarUbicacion.setOnClickListener {
             var intent=Intent(this,SeleccionarUbicacion::class.java)
-            intent.putExtra("ubicacion",lugar.text)
+          //  intent.putExtra("ubicacion",lugar.text)
             intent.putExtra("viajeKey",viajeKey)
+            intent.putExtra("editar","editar")
             startActivity(intent)
         }
         var btnEditarFechas:ImageView=findViewById(R.id.btnEditFechas)
         btnEditarFechas.setOnClickListener {
-            var intent=Intent(this,SeleccionarFecha::class.java)
+            var intent=Intent(this,SeleccionarUbicacion::class.java)
             intent.putExtra("fechaInicio", viajeSel.fechaInicio)
             intent.putExtra("fechaFinal", viajeSel.fechaFinal)
             intent.putExtra("viajeKey",viajeKey)
+            intent.putExtra("ubicacion",lugar.text)
+            intent.putExtra("editar","editar")
             startActivity(intent)
         }
 

@@ -75,6 +75,7 @@
                     <LinearLayout
                         android:id="@+id/mis_viajes_ly"
                         android:layout_width="match_parent"
+                        android:layout_marginTop="-15dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:paddingBottom="56dp"

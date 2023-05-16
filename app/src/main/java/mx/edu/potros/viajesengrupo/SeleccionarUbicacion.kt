@@ -22,6 +22,7 @@ class SeleccionarUbicacion : AppCompatActivity() {
       //var calendario:DatePicker=findViewById(R.id.calendario)
 
 
+
         var btnSiguiente: Button = findViewById(R.id.btnSiguiente)
         btnSiguiente.setOnClickListener {
             var intent= Intent(this,SeleccionarFecha::class.java)
@@ -75,6 +76,9 @@ class SeleccionarUbicacion : AppCompatActivity() {
             }
             // termina :D
 
+        val viajeKey = intent.getStringExtra("viajeKey")
+        val editar = intent.getStringExtra("editar")
+
         agregarUbicacionesPopulares()
         agregarUbicaciones()
 
@@ -110,6 +114,9 @@ class SeleccionarUbicacion : AppCompatActivity() {
             if(txtUbicacion.text.isNotBlank()){
                 SeleccionarFecha.setUbicacion(txtUbicacion.text.toString())
                 val intent = Intent(this, SeleccionarFecha::class.java)
+                intent.putExtra("viajeKey", viajeKey)
+                intent.putExtra("editar",editar)
+                intent.putExtra("ubicacion", ubicacion)
                 startActivity(intent)
                 finish()
             }

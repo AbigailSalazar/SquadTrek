@@ -14,6 +14,7 @@
         <include layout="@layout/activity_app_bar"/>
 
         <TextView
+            android:id="@+id/agregarEventoTxt"
             android:layout_width="211dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="122dp"

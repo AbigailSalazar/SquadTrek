@@ -108,44 +108,39 @@
                 android:fontFamily="@font/montserrat_semibold" />
 
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="45dp"
+                android:orientation="horizontal">
+
+
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:fillViewport="true">
 
-                    <ImageView
-                        android:id="@+id/amigo1_tu_viaje"
-                        android:layout_width="59dp"
-                        android:layout_height="59dp"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/round_circle"/>
-                    <ImageView
-                        android:id="@+id/amigo2_tu_viaje"
-                        android:layout_width="59dp"
-                        android:layout_height="59dp"
-                        android:layout_marginLeft="15dp"
-                        android:src="@drawable/round_circle"/>
-                    <ImageView
-                        android:id="@+id/amigo3_tu_viaje"
-                        android:layout_width="59dp"
-                        android:layout_height="59dp"
-                        android:layout_marginLeft="15dp"
-                        android:src="@drawable/round_circle"/>
+                    <LinearLayout
+                        android:id="@+id/amigos_tu_viaje_ly"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/btnAddFriends"
-                        android:layout_width="59dp"
-                        android:layout_height="59dp"
-                        android:elevation="6dp"
-                        android:layout_marginLeft="15dp"
-                        android:background="@drawable/round_button_white"
-                        android:layout_marginBottom="10dp"
-                        android:src="@drawable/ic_add"/>
+                        <ImageButton
+                            android:id="@+id/btnAddFriends"
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:elevation="5dp"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/round_button_white"
+                            android:src="@drawable/ic_add"/>
 
-
-
-                </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
 
 
         </LinearLayout>

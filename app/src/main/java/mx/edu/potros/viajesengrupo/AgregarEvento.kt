@@ -29,7 +29,12 @@ class AgregarEvento : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_evento)
 
+        var agregarEventoTxt:TextView=findViewById(R.id.agregarEventoTxt)
         //viaje de prueba
+        val editar = intent.getStringExtra("editar")
+        if (editar==editar){
+            agregarEventoTxt.text="Editar evento"
+        }
 
 
         txtEncargado=findViewById(R.id.txtEncargado)
