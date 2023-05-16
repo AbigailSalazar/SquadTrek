@@ -121,7 +121,7 @@ class Eventos : AppCompatActivity() {
                 val evento = snapshot.getValue<Evento>()
                 if (evento != null) {
                     print(evento.titulo)
-                    addEvento(evento)
+                    addEvento(evento,snapshot.key!!)
                 }
             }
 
@@ -148,7 +148,7 @@ class Eventos : AppCompatActivity() {
             .child(fechaEvento!!.replace("/","-")).addChildEventListener(eventosListener)
     }
 
-    fun addEvento(evento:Evento){
+    fun addEvento(evento: Evento, key: String){
         var inflador=LayoutInflater.from(this);
         var vista=inflador.inflate(R.layout.activity_evento,null)
 
@@ -157,6 +157,7 @@ class Eventos : AppCompatActivity() {
         var hora=vista.findViewById(R.id.txtHora) as TextView
         var ubicacion=vista.findViewById(R.id.txtUbicacion) as TextView
         var imgEncargado=vista.findViewById(R.id.imgEncargado) as ImageView
+        var btnEditarEvento=vista.findViewById(R.id.btnEditEvento) as ImageView
 
         icono.setImageResource(R.drawable.house)
         titulo.setText(evento.titulo)
@@ -168,12 +169,25 @@ class Eventos : AppCompatActivity() {
             intent.putExtra("idAmigo", evento.encargado.id)
             startActivity(intent)
         }
+        btnEditarEvento.setOnClickListener {
+            val intent = Intent(this, AgregarEvento::class.java)
+            intent.putExtra("idEvento", key)
+            intent.putExtra("titulo", evento.titulo)
+            intent.putExtra("hora", evento.hora)
+            intent.putExtra("ubicacion", evento.ubicacion)
+            intent.putExtra("idAmigo", evento.encargado.id)
+            intent.putExtra("encargado",evento.encargado.username)
+            startActivity(intent)
+        }
 
-        Glide.with(this@Eventos)
-            .load(evento.encargado.foto)
-            .into(imgEncargado)
+        if(!isFinishing){
+            Glide.with(this@Eventos)
+                .load(evento.encargado.foto)
+                .into(imgEncargado)
 
-        list.addView(vista)
+            list.addView(vista)
+        }
+
     }
 
     fun llenarListaEventos(listEventos: LinearLayout){
@@ -199,12 +213,12 @@ class Eventos : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            var btnEditarEvento:ImageView=findViewById(R.id.btnEditEvento)
-            btnEditarEvento.setOnClickListener {
-                var intent=Intent(this,AgregarEvento::class.java)
-                intent.putExtra("editar","editar")
-                startActivity(intent)
-            }
+//            var btnEditarEvento:ImageView=findViewById(R.id.btnEditEvento)
+//            btnEditarEvento.setOnClickListener {
+//                val intent = Intent(this, AgregarEvento::class.java)
+//                intent.putExtra("idEvento", key)
+//                startActivity(intent)
+//            }
 
             Glide.with(this@Eventos)
                 .load(it.encargado.foto)

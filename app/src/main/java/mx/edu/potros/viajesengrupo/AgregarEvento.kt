@@ -29,16 +29,27 @@ class AgregarEvento : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_evento)
 
+        var titulo=""
+        var hora=""
+        var ubicacion=""
+        var encargado=""
         var agregarEventoTxt:TextView=findViewById(R.id.agregarEventoTxt)
         //viaje de prueba
-        val editar = intent.getStringExtra("editar")
-        if (editar==editar){
+        val idEvento = intent.getStringExtra("idEvento")
+        if (idEvento!=null){
             agregarEventoTxt.text="Editar evento"
+            titulo= intent.getStringExtra("titulo")!!
+            hora=intent.getStringExtra("hora")!!
+            ubicacion=intent.getStringExtra("ubicacion")!!
+            encargado=intent.getStringExtra("encargado")!!
         }
 
 
         txtEncargado=findViewById(R.id.txtEncargado)
 
+        if(idEvento!=null){
+            txtEncargado.text="Encargado: $encargado"
+        }
         txtWeakReference = WeakReference(txtEncargado)
         var fechaEvento= this.intent.getStringExtra("dia")
         val btnSelectAmigo = findViewById<Button>(R.id.btnSelectAmigo)
@@ -102,6 +113,10 @@ class AgregarEvento : AppCompatActivity() {
         //Editar nombre del evento
 
         var txtTitulo:TextView= findViewById(R.id.txtTitulo)
+        if(idEvento!=null){
+            txtTitulo.text=titulo
+        }
+
         txtTitulo.setOnClickListener {
             var input:EditText=EditText(this)
             input.inputType=InputType.TYPE_CLASS_TEXT
@@ -124,6 +139,9 @@ class AgregarEvento : AppCompatActivity() {
 
         //Editar hora del evento
         var txtHora:TextView= findViewById(R.id.txtHora)
+        if(idEvento!=null){
+            txtHora.text=hora
+        }
         txtHora.setOnClickListener {
             var input:TimePicker= TimePicker(this)
             val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
@@ -145,6 +163,11 @@ class AgregarEvento : AppCompatActivity() {
 
         //Editar ubicacion del evento
         var txtUbicacion:TextView= findViewById(R.id.txtUbicacion)
+
+        if(idEvento!=null){
+            txtUbicacion.text=ubicacion
+        }
+
         txtUbicacion.setOnClickListener {
             var input:EditText=EditText(this)
             input.inputType=InputType.TYPE_CLASS_TEXT
