@@ -207,46 +207,4 @@ class Eventos : AppCompatActivity() {
             listEventos.addView(vista)
         }
     }
-/*    private class EventoAdapter:BaseAdapter{
-        var listEventos =ArrayList<Evento>()
-        var contexto:Context?=null
-
-        constructor(contexto: Context?,listEventos: ArrayList<Evento> ){
-            this.listEventos = listEventos
-            this.contexto = contexto
-        }
-
-        override fun getCount(): Int {
-            return listEventos.size
-        }
-
-        override fun getItem(p0: Int): Any {
-            return listEventos.get(p0)
-        }
-
-        override fun getItemId(p0: Int): Long {
-            return p0.toLong()
-        }
-
-        override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-            var evento = listEventos[p0]
-            var inflador=LayoutInflater.from(contexto)
-            var vista=inflador.inflate(R.layout.activity_evento,null)
-
-            var icono=vista.findViewById(R.id.iconTitle) as ImageView
-            var titulo=vista.findViewById(R.id.txtTitulo) as TextView
-            var hora=vista.findViewById(R.id.txtHora) as TextView
-            var ubicacion=vista.findViewById(R.id.txtHora) as TextView
-            var imgEncargado=vista.findViewById(R.id.imgEncargado) as ImageView
-
-            icono.setImageResource(evento.icono)
-            titulo.setText(evento.titulo)
-            hora.setText((evento.hora))
-            ubicacion.setText(evento.ubicacion)
-            //imgEncargado.setImageResource(evento.imgEncargado)
-
-            return vista
-        }
-
-    }*/
 }

@@ -192,6 +192,7 @@ class AgregarEvento : AppCompatActivity() {
                             .child(dia!!.replace("/","-"))
                             .push()
                             .setValue(evento)
+
                     }
                     finish()
                 }

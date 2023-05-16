@@ -44,6 +44,7 @@
             android:src="@drawable/i5" />
 
         <TextView
+            android:id="@+id/txtCodigoViaje"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"

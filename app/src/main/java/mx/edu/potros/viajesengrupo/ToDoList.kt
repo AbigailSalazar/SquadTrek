@@ -16,6 +16,7 @@ import com.google.firebase.database.*
 
 class ToDoList : AppCompatActivity() {
     private val userRef = FirebaseDatabase.getInstance().getReference("Usuarios")
+    private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     private var contador: Long = 0
@@ -75,9 +76,7 @@ class ToDoList : AppCompatActivity() {
         }
         // termina :D
 
-        var toDoListRef = userRef.child(usuarioId!!)
-            .child("viajesEnProceso")
-            .child(viajeId!!)
+        var toDoListRef = viajesRef.child(viajeId!!)
             .child("toDoList")
 
         toDoListRef.addValueEventListener(object : ValueEventListener {

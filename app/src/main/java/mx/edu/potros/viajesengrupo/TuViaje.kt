@@ -86,6 +86,13 @@ class TuViaje : AppCompatActivity() {
         }
         // termina :D
 
+        var btnAgregarAmigo:ImageButton=findViewById(R.id.btnAddFriends)
+        btnAgregarAmigo.setOnClickListener {
+            val intent = Intent(this, AgregarAmigoViaje::class.java)
+            intent.putExtra("viajeKey", viajeSel.id)
+            startActivity(intent)
+        }
+
         val btnTodolist = findViewById<TextView>(R.id.tu_viaje_todolist_tv)
         btnTodolist.setOnClickListener {
             val intent = Intent(this, ToDoList::class.java)
@@ -130,35 +137,6 @@ class TuViaje : AppCompatActivity() {
                 }
             }
 
-        }
-
-
-       /* val btnEvento1 = findViewById<Button>(R.id.btnEvento1)
-        val btnEvento2 = findViewById<Button>(R.id.btnEvento2)
-
-
-
-
-
-        btnEvento1.setOnClickListener {
-            val intent = Intent(this, Eventos::class.java)
-            var viajeKey=this.intent.getStringExtra("viajeKey")
-            //agregar la fecha, para poderlo buscar los eventos en la bd
-            intent.putExtra("dia","11 feb,2023")
-            if(viajeKey!=null){
-                intent.putExtra("viajeKey",viajeKey)
-            }
-            startActivity(intent)
-        }
-        btnEvento2.setOnClickListener {
-            val intent = Intent(this, Eventos::class.java)
-            startActivity(intent)
-        }
-*/
-        var btnAmigos:ImageButton= findViewById(R.id.btnAddFriends)
-        btnAmigos.setOnClickListener {
-            val intent = Intent(this, AgregarAmigoViaje::class.java)
-            startActivity(intent)
         }
 
         //carga el viaje desde firebase

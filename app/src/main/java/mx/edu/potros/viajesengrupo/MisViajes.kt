@@ -28,6 +28,7 @@ class MisViajes : AppCompatActivity() {
     private val mAuth = FirebaseAuth.getInstance().currentUser
     val usuarioId = mAuth?.uid
     //val usuarioId="-NUileJDCu_cQMfcael9"
+    var amigosId=ArrayList<String>()
     private val userRef= FirebaseDatabase.getInstance().getReference("Usuarios")
     private val viajesRef= FirebaseDatabase.getInstance().getReference("Viajes")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,6 +137,7 @@ class MisViajes : AppCompatActivity() {
         var lugar=vista.findViewById(R.id.mis_viajes_lugar_tv) as TextView
         var imagen=vista.findViewById(R.id.mis_viajes_imagen_iv) as ImageView
         var fecha=vista.findViewById(R.id.mis_viajes_rango_fechas_tv) as TextView
+        var amigosLy=vista.findViewById(R.id.amigos_viaje_ly) as LinearLayout
         //var amigos=vista.findViewById(R.id.amigo1) as ImageView
 
 
@@ -152,6 +154,20 @@ class MisViajes : AppCompatActivity() {
             //intent.putExtra("viajeKey",viajesids.get(imagen))
             startActivity(intent)
         }
+        var fotos= obtenerFotosAmigos(viaje.id,amigosLy)
+//        for(foto in fotos){
+//            var inflater=LayoutInflater.from(this)
+//            var view=inflater.inflate(R.layout.amigo_view,null)
+//            var imageView:ImageView=view.findViewById(R.id.amigoImg)
+//            if(foto!=""){
+//                Glide.with(this@MisViajes)
+//                    .load(foto)
+//                    .error(R.drawable.round_circle)
+//                    .into(imageView)
+//
+//            }
+//            amigosLy.addView(view)
+//        }
         list.addView(vista)
 
     }
@@ -159,7 +175,8 @@ class MisViajes : AppCompatActivity() {
     fun unirseViaje(codigoViaje:String){
         var cantAmigos=0
         var codigoValido=false
-        viajesRef.orderByChild("codigoViaje")
+        viajesRef
+            .orderByChild("codigoViaje")
             .equalTo(codigoViaje)
             .addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(
@@ -167,8 +184,8 @@ class MisViajes : AppCompatActivity() {
                     previousChildName: String?
                 ) {
                     val datosViaje = snapshot.value as HashMap<*, *>
-                    val codigo = snapshot.key
-
+                    val codigo = datosViaje["codigoViaje"] as String
+                    val ubicacion=datosViaje["ubicacion"] as String
                     var yaSeUnio=false
                     //si el codigo del viaje es valido
                     //añadir amigo a viaje
@@ -199,6 +216,11 @@ class MisViajes : AppCompatActivity() {
                             val map: MutableMap<String, Any> = HashMap()
                             map[(cantAmigos + 1).toString()] = usuarioId!!
                             viajesRef.child(viajeId).child("amigos").updateChildren(map)
+
+                            //se registra el id del viaje en el usuario
+                            val mapViajes: MutableMap<String, Any> = java.util.HashMap()
+                            mapViajes[viajeId!!] = ubicacion
+                            userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(mapViajes)
                             codigoValido=true
                             //finish()
                         }
@@ -250,8 +272,8 @@ class MisViajes : AppCompatActivity() {
         //obtiene las referencias a los viajes del usuario
         val viajesListener = object :  ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val datosAmigos = snapshot.getValue()
-                viajesids.add(datosAmigos.toString())
+                val id = snapshot.key
+                viajesids.add(id!!)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -277,6 +299,7 @@ class MisViajes : AppCompatActivity() {
                     val ubicacion = datosViaje["ubicacion"] as String
                     val fechaInicio = datosViaje["fechaInicio"] as String
                     val fechaFinal = datosViaje["fechaFinal"] as String
+
 
                     val nuevoViaje = Viaje(viajeId!!,fechaInicio, fechaFinal, ArrayList<String>(), ubicacion, ArrayList<Evento>())
                     addViaje(nuevoViaje)
@@ -308,7 +331,57 @@ class MisViajes : AppCompatActivity() {
 
     }
 
+    fun obtenerFotosAmigos(viajeId:String,amigosLy:LinearLayout):ArrayList<String>{
+        var fotos=ArrayList<String>()
+        val amigosListener = object :  ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 
+                val fotoRef = FirebaseDatabase.getInstance().getReference("Fotos").child(snapshot.value as String)
+
+                var inflater=LayoutInflater.from(baseContext)
+                var view=inflater.inflate(R.layout.amigo_view,null)
+                var imageView:ImageView=view.findViewById(R.id.amigoImg)
+
+                fotoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()&& dataSnapshot.hasChild("foto")) {
+                            val fotoUrl = dataSnapshot.child("foto").value.toString()
+                            fotos.add(fotoUrl)
+                            if(fotoUrl!=""){
+                                Glide.with(this@MisViajes)
+                                    .load(fotoUrl)
+                                    .error(R.drawable.round_circle)
+                                    .into(imageView)
+                                amigosLy.addView(view)
+                            }
+                        }
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.d("TAG", "Error al leer la URL de la foto del usuario", databaseError.toException())
+                    }
+                })
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        }
+
+        viajesRef.child(viajeId)
+            .child("amigos").addChildEventListener(amigosListener)
+
+        return fotos
+    }
 
 
 }

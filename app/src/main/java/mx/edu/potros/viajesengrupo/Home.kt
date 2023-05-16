@@ -120,8 +120,8 @@ class Home : AppCompatActivity() {
         //obtiene las referencias a los viajes del usuario
         val viajesListener = object :  ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val datosAmigos = snapshot.getValue()
-                viajesids.add(datosAmigos.toString())
+                val id = snapshot.key
+                viajesids.add(id!!)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
