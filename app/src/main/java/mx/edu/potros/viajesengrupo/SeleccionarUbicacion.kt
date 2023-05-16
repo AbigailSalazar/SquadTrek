@@ -98,6 +98,12 @@ class SeleccionarUbicacion : AppCompatActivity() {
         )
         txtUbicacion.setAdapter(adapterUbicacion)
 
+        //si viene a editar
+        var ubicacion=intent.getStringExtra("ubicacion")
+        if(ubicacion!=null){
+            txtUbicacion.setText(ubicacion)
+        }
+
         //siguiente activity con ubicacion personalizada
         var btnContinuar:Button=findViewById(R.id.btnSiguiente)
         btnContinuar.setOnClickListener {

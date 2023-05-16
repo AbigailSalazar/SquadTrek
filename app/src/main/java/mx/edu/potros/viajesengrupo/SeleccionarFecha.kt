@@ -80,7 +80,17 @@ class SeleccionarFecha : AppCompatActivity() {
         var calendarInicio: CalendarView = findViewById(R.id.calendarioInicio)
         var calendarFinal: CalendarView = findViewById(R.id.calendarioFinal)
 
+        //si viene a editar
+        var edFechaInicio=intent.getStringExtra("fechaInicio")
+        var edFechaFinal=intent.getStringExtra("fechaFinal")
+
+
         var dateFormat:DateFormat = SimpleDateFormat("dd/MM/yyyy");
+
+        if(edFechaInicio!=null){
+            calendarInicio.date=dateFormat.parse(edFechaInicio).time
+            calendarFinal.date=dateFormat.parse(edFechaFinal).time
+        }
 
         var fechaInicio=dateFormat.format(calendarInicio.date)
         var fechaFinal=dateFormat.format(calendarFinal.date)

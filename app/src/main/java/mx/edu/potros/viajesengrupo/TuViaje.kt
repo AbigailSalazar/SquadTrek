@@ -1,6 +1,7 @@
 package mx.edu.potros.viajesengrupo
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,6 +38,7 @@ class TuViaje : AppCompatActivity() {
            var adaptador: TuViaje.AdaptadorViajes = TuViaje.AdaptadorViajes(this, tuViajes)
            listview.adapter = adaptador
    */
+
 
         // Empieza :D
         val btnNavAdd = findViewById<ImageButton>(R.id.btnNavAdd)
@@ -155,7 +157,23 @@ class TuViaje : AppCompatActivity() {
             fecha.setText(viajeSel.fechaInicio+" a "+ viajeSel.fechaFinal)
         }
 
+        //para editar viaje
 
+        var btnEditarUbicacion:ImageView=findViewById(R.id.btnEditUbicacion)
+        btnEditarUbicacion.setOnClickListener {
+            var intent=Intent(this,SeleccionarUbicacion::class.java)
+            intent.putExtra("ubicacion",lugar.text)
+            intent.putExtra("viajeKey",viajeKey)
+            startActivity(intent)
+        }
+        var btnEditarFechas:ImageView=findViewById(R.id.btnEditFechas)
+        btnEditarFechas.setOnClickListener {
+            var intent=Intent(this,SeleccionarFecha::class.java)
+            intent.putExtra("fechaInicio", viajeSel.fechaInicio)
+            intent.putExtra("fechaFinal", viajeSel.fechaFinal)
+            intent.putExtra("viajeKey",viajeKey)
+            startActivity(intent)
+        }
 
     }
 
