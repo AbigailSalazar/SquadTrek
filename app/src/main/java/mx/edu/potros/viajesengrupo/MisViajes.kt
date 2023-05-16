@@ -154,7 +154,7 @@ class MisViajes : AppCompatActivity() {
             //intent.putExtra("viajeKey",viajesids.get(imagen))
             startActivity(intent)
         }
-        var fotos= obtenerFotosAmigos(viaje.id,amigosLy)
+      //  var fotos= obtenerFotosAmigos(viaje.id,amigosLy)
 //        for(foto in fotos){
 //            var inflater=LayoutInflater.from(this)
 //            var view=inflater.inflate(R.layout.amigo_view,null)
@@ -212,6 +212,7 @@ class MisViajes : AppCompatActivity() {
 
                             })
                         if(!yaSeUnio){
+                            codigoValido=true
                             //Se registra el amigo a este viaje
                             val map: MutableMap<String, Any> = HashMap()
                             map[(cantAmigos + 1).toString()] = usuarioId!!
@@ -221,7 +222,9 @@ class MisViajes : AppCompatActivity() {
                             val mapViajes: MutableMap<String, Any> = java.util.HashMap()
                             mapViajes[viajeId!!] = ubicacion
                             userRef.child(usuarioId!!).child("viajesEnProceso").updateChildren(mapViajes)
-                            codigoValido=true
+
+                            finish()
+                            startActivity(intent)
                             //finish()
                         }
 
@@ -248,22 +251,19 @@ class MisViajes : AppCompatActivity() {
                 }
 
             })
+            if(!codigoValido){
+                val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
 
-        if(codigoValido){
-            finish()
-            startActivity(intent)
-        }
-        else{
-            val builder =  AlertDialog.Builder(this,R.style.MyDialogTheme)
+                builder.setMessage("Código invalido")
+                    .setPositiveButton("Aceptar",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.dismiss()
+                        })
+                builder.create()
+                builder.show()
+            }
 
-            builder.setMessage("Código invalido")
-                .setPositiveButton("Aceptar",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.dismiss()
-                    })
-            builder.create()
-            builder.show()
-        }
+
     }
 
 
